@@ -3,7 +3,7 @@ import spotipy
 lbc_uri = 'spotify:artist:2HMtMLKEIOoamQysJlFP7i'
 spotify = spotipy.Spotify()
 
-results = spotify.artist_albums(baseball_uri, album_type='album')
+results = spotify.artist_albums(lbc_uri, album_type='album')
 albums = results['items']
 while results['next']:
 	results = spotify.next(results)
