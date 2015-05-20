@@ -1,6 +1,6 @@
 import spotipy
 
-baseball_uri = 'spotify:artist:3Ek1EdkcbRFvSDJj9j5JXQ'
+lbc_uri = 'spotify:artist:2HMtMLKEIOoamQysJlFP7i'
 spotify = spotipy.Spotify()
 
 results = spotify.artist_albums(baseball_uri, album_type='album')
