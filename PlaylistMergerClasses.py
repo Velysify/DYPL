@@ -33,6 +33,10 @@ class MatchingCategory:
 
     def __init__(self, array_of_songs_in_playlist):
         self.harmony_rating = 0
+
+        #playlist_data should always be implemented as a dictionary with a string as a key and a list as value.
+        #The key string represents the item of each category (genre names for a genre category, artist names for an artist category, etc.)
+        #The first value of the list should always be an inte representing the "weight" of each item
         self.playlist_data = {}
     def generate_playlist(self):
         pass
@@ -57,12 +61,14 @@ class MatchingCategorySong(MatchingCategory):
             artist_song_identifier = str(track.name())+" - "+str(track.artists()[0].name())
 
             if not artist_song_identifier in self.playlist_data.keys():
-                self.playlist_data[artist_song_identifier][0] = track.id()
-                self.playlist_data[artist_song_identifier][1] += 1
+                playlist_analysis[artist_song_identifier][0] = track.id()
+                playlist_analysis[artist_song_identifier][1] += 1
             else:
                 #is this even necessary???
-                self.playlist_data[artist_song_identifier][0] = track.id()
-                self.playlist_data[artist_song_identifier][1] = 1
+                playlist_analysis[artist_song_identifier][0] = track.id()
+                playlist_analysis[artist_song_identifier][1] = 1
+
+        return playlist_analysis
 
 
 
