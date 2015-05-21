@@ -48,6 +48,7 @@ class MatchingCategorySong(MatchingCategory):
         MatchingCategory.__init__(self, playlist)
 
     def analyze_playlist(playlist):
+        pass
 
 
 
