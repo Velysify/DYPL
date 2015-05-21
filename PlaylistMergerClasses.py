@@ -1,5 +1,7 @@
 import PlaylistGeneratorAlgorithms
 import MergingAlgorithms
+import spotipy
+import spotipy.util as util
 
 class Playlist:
     def __init__(self):
