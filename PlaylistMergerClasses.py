@@ -13,10 +13,8 @@ class Playlist:
     def __init__(self):
 
         self.array_of_songs_in_playlist = []
-        token = 'BQCkSiwGY8pUHjpZnp1uYSAgX-fJhIUa1U1aY_nGlC5jNTFvxw-aUwnDNkM9QtML6xIdEwLpLGMuvjsB_t0oaNLEokpUBksyjkhir0Ivg5N8VdV7QO-E3bR7Eph4tBrfr8_VNcO4_k7hqdCJSF1e5dp2xmEyzkMQipFyWSl-Gy_hf9DVcfoZFQHltXg-zkNMOBSLdniWntB_sw1amybjL0RhOy9x-FjYgNlzBVAvce3xTgEQBAYM443qJ35M3fzfPKys-BvpNEdDLx9RvTrbKcrm3cteN0D_QSvWEpY-8Fmy'
+        token = 'BQAIwyjn2Ko3hEH7Ha-25oL1-JzdiQdyHa_7CWzJVKm2uMCpLMiwTq9Bk8YJCnGgVhY0xwDnu5xcQ6qjQbVnrN1gPOiUFvmLeCSpoQzqhKlvdUttjRjavwfSku0n9zSdNZJEEBnSfcBIKUM4jsoaeYh3X5U0sWdPfu9qEWqFc3VJG1GV7yctLiR2ySvoIGXdLeoNsGml82QyEn6tRVLn44MsDVo4b6UwpVv_ZHaEE2xyOiXT8s43yJ90u_IDeKvzTTq4gFkKp484K064sE9MTz4gi5kYMqk6d7__jU9TUICo'
 
-        
-    
         if token:
             sp = spotipy.Spotify(auth=token)
             sp.trace = False
@@ -59,43 +57,43 @@ class MatchingCategory:
 class MatchingCategorySong(MatchingCategory):
 
     def __init__(self, playlist):
+        self.playlist_data = {}
         self.playlist_data = self.analyze_playlist(playlist)
 
-        MatchingCategory.__init__(self, playlist)
+        #MatchingCategory.__init__(self, playlist)
 
-    def analyze_playlist(self, array_of_songs_in_playlist):
+    def analyze_playlist(self, playlist):
         #Creates the dictionary object to return
         playlist_analysis = {}
 
-        for track in array_of_songs_in_playlist:
+        for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            artist_song_identifier = str(track.name())+" - "+str(track.artists()[0].name())
-
-            if not artist_song_identifier in self.playlist_data.keys():
-                playlist_analysis[artist_song_identifier][0] = track.id()
-                playlist_analysis[artist_song_identifier][1] += 1
+            artist_song_identifier = str(track['name'])+" - "+ str(track['artists'][0]['name'])
+            if not artist_song_identifier in playlist_analysis.keys() and artist_song_identifier not in self.playlist_data.keys():
+                item = []
+                item.append(1)
+                item.append(track['uri'])
+                playlist_analysis[artist_song_identifier] = item
             else:
-                #is this even necessary???
-                playlist_analysis[artist_song_identifier][0] = track.id()
-                playlist_analysis[artist_song_identifier][1] = 1
-
+                value = playlist_analysis.get(artist_song_identifier)
+                new_value= value[0]+1
+                value[0] = new_value
+                
         return playlist_analysis
-
-
-
-
-
-
 
 def merge_matching_categories(*matching_categories):
     merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes(*matching_categories)
 
     return merging_algorithm(*matching_categories)
 
-def merge_plalists(*playlists):
+def merge_playlists(*playlists):
     merging_algorithm = MergingAlgorithms.pl_best(*playlists)
 
     return merging_algorithm(*playlists)
+def menu():
+    playlist = Playlist()
+    mc = MatchingCategorySong(playlist)
+    print(mc.playlist_data)
 
-test = Playlist()
+menu()
