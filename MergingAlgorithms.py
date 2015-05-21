@@ -1,5 +1,4 @@
 import unittest
-import unittest.
 def mc_based_on_common_tastes(*matching_categories):
     #Returns a matching_category containing only the songs present in all of the playlists
     #Hopelessly ugly and ineffective, should be rewritten
