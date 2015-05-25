@@ -16,10 +16,11 @@ class Playlist:
         self.matching_categories = []
 
         if (option == 1):
-            self.array_of_songs_in_playlist = self.fill_up_array_of_songs_in_playlist()
+            self.fill_up_array_of_songs_in_playlist(playlist)
 
     def fill_up_array_of_songs_in_playlist(self, playlist):
-        token = 'BQCUo1d3voPId39oIt63AFjsVYGUqWbMlyM5bu1Y89ysBG0c9an5PVWsoDVkikPAGiDf3Zd22cQfibF6cbkvQ2Jtfe-HFmekXVmXuulWizvKO3HzlbevR5SfVKtAGe3WCqm8d3Bbantsi1jDGpXAdst613vKSGdcFMzEimQmvPkqJ8JoVooHo8_SH0ruDX1hDgZnjqxAoqT1_4P_dvR42ubjFwZjfQuMA1iisJkv1t1b_fE5jK9AMWxDbJmdIHJYjnrTDxYZyTFsgD-e8iFyxFOvVd8Sp4AZrCjPEk0PaD8d'
+
+        token = 'BQDmWYSzE-cb-rl7rMovBOJGiukBNF5uz11IQrMfltrVxuD4zHeGyXt4gQHM1jrADvuppFZQGuKk1L_L3MRcBUykBk-M9N71Fe2skzzboy_4fBqXsoyGfqWA8yLYJdh2aMFVujtnuQSFmH74w7RKYs6fMlc2mELjud0qnU0zU_CEHZAyPxFsRmowO5VatV1WE2zW0UQDS5BRGfnF5BjN95qrKqa9ZSUN_uPOUC53ud0sF26VEoEuMqLfCy2EsEeEavXMeP4I1RiDI7OfjGbHxQT12B9evb84IG51gx2jrkRD'
 
         if token:
             sp = spotipy.Spotify(auth=token)
@@ -146,30 +147,34 @@ def merge_matching_categories(*matching_categories):
     merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
 
     return merging_algorithm(*matching_categories)
+    #return MergingAlgorithms.mc_based_on_common_tastes(*matching_categories)
 
 def merge_playlists(*playlists):
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever(*playlists)
 
     return merging_algorithm(*playlists)
+
 def menu(self):
     
-    playlist1 = Playlist('3BVqFufvKtRenYZjG9y3to')
-    playlist2 = Playlist('7jqQCJtZsORrU5X2rK9px0')
-    playlist3 = Playlist('1hNFR8Y66XAibRx5xDnYiZ')
+    playlist1 = Playlist('3BVqFufvKtRenYZjG9y3to', 1)
+    playlist2 = Playlist('7jqQCJtZsORrU5X2rK9px0', 1)
+    playlist3 = Playlist('1hNFR8Y66XAibRx5xDnYiZ', 1)
 
 
-    merged_playlist = self.merge_playlist(playlist1, playlist2, playlist3)
+#    merged_playlist = self.merge_playlist(playlist1, playlist2, playlist3)
 
-    mc1 = MatchingCategorySong(playlist1)
-    mc2 = MatchingCategorySong(playlist2)
-    mc3 = MatchingCategorySong(playlist3)
+    mc1 = MatchingCategoryArtist(playlist1)
+    mc2 = MatchingCategoryArtist(playlist2)
+    mc3 = MatchingCategoryArtist(playlist3)
+
+    print merge_matching_categories(mc1, mc2, mc3)
 
 
     #print(mc1.playlist_data)
     #print(mc2.playlist_data)
 
-    print merged_playlist.matching_categories
+#    print merged_playlist.matching_categories
     
     
 
-menu()
+menu(menu)
