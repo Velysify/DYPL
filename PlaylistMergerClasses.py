@@ -10,11 +10,17 @@ spotify = spotipy.Spotify()
 
 class Playlist:
 
-    def __init__(self,playlist):
+    def __init__(self,playlist, option):
 
         self.array_of_songs_in_playlist = []
-        token = 'BQA26P7YU_PQ27hnDtfqr9eKCKZJVQ0JAftkUUEN0gO2u_7eWA7xRvIYeK-lSwjWveIwcaBo6OOUugMK-GKJ_M0BS9DJr2aYpS4ybxIBybBIU5-_acrsqKOFwwKWHcrsdO-mIMfBgIk9V4BdmrkFiqLYU1t3uQAKcyevYiKrBX44leNTCafRe8j2xYU9cDRghWbEU_0GBVSpeNnWmyAdOROjdoU_OWyVMNTFyA7mN7jovvohEjF3nD0NdLQxtW2E2LlwI1wwOdBJnZInTkWdRkgSEw9Ojqhhcnvr0xQE_qAc'
-        
+        self.matching_categories = []
+
+        if (option == 1):
+            self.array_of_songs_in_playlist = self.fill_up_array_of_songs_in_playlist()
+
+    def fill_up_array_of_songs_in_playlist(self, playlist):
+        token = 'BQCUo1d3voPId39oIt63AFjsVYGUqWbMlyM5bu1Y89ysBG0c9an5PVWsoDVkikPAGiDf3Zd22cQfibF6cbkvQ2Jtfe-HFmekXVmXuulWizvKO3HzlbevR5SfVKtAGe3WCqm8d3Bbantsi1jDGpXAdst613vKSGdcFMzEimQmvPkqJ8JoVooHo8_SH0ruDX1hDgZnjqxAoqT1_4P_dvR42ubjFwZjfQuMA1iisJkv1t1b_fE5jK9AMWxDbJmdIHJYjnrTDxYZyTFsgD-e8iFyxFOvVd8Sp4AZrCjPEk0PaD8d'
+
         if token:
             sp = spotipy.Spotify(auth=token)
             sp.trace = False
@@ -24,14 +30,14 @@ class Playlist:
             for i in song:
                 i = i['track']
                 self.array_of_songs_in_playlist.append(i)
-            
+
         else:
             print "Can't get token for", username
-        
-       
-        
-        matching_categories = []
 
+    def generate_matching_categories(self):
+        #hårdkodat, se till att det går att konfigurera @ runtime
+
+        self.matching_categories[0] = MatchingCategorySong(self)
     def generate_playlist(self):
         pass
 
@@ -82,20 +88,21 @@ class MatchingCategorySong(MatchingCategory):
 
 def merge_matching_categories(*matching_categories):
     merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
-    
+
     return merging_algorithm(*matching_categories)
 
-
 def merge_playlists(*playlists):
-    merging_algorithm = MergingAlgorithms.pl_best(*playlists)
+    merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever(*playlists)
 
     return merging_algorithm(*playlists)
-def menu():
+def menu(self):
     
     playlist1 = Playlist('3BVqFufvKtRenYZjG9y3to')
     playlist2 = Playlist('7jqQCJtZsORrU5X2rK9px0')
     playlist3 = Playlist('1hNFR8Y66XAibRx5xDnYiZ')
 
+
+    merged_playlist = self.merge_playlist(playlist1, playlist2, playlist3)
 
     mc1 = MatchingCategorySong(playlist1)
     mc2 = MatchingCategorySong(playlist2)
@@ -105,7 +112,7 @@ def menu():
     #print(mc1.playlist_data)
     #print(mc2.playlist_data)
 
-    print merge_matching_categories(mc1, mc2, mc3)
+    print merged_playlist.matching_categories
     
     
 
