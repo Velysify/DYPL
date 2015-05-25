@@ -10,15 +10,15 @@ spotify = spotipy.Spotify()
 
 class Playlist:
 
-    def __init__(self):
+    def __init__(self,playlist):
 
         self.array_of_songs_in_playlist = []
-        token = 'BQAIwyjn2Ko3hEH7Ha-25oL1-JzdiQdyHa_7CWzJVKm2uMCpLMiwTq9Bk8YJCnGgVhY0xwDnu5xcQ6qjQbVnrN1gPOiUFvmLeCSpoQzqhKlvdUttjRjavwfSku0n9zSdNZJEEBnSfcBIKUM4jsoaeYh3X5U0sWdPfu9qEWqFc3VJG1GV7yctLiR2ySvoIGXdLeoNsGml82QyEn6tRVLn44MsDVo4b6UwpVv_ZHaEE2xyOiXT8s43yJ90u_IDeKvzTTq4gFkKp484K064sE9MTz4gi5kYMqk6d7__jU9TUICo'
-
+        token = 'BQCUo1d3voPId39oIt63AFjsVYGUqWbMlyM5bu1Y89ysBG0c9an5PVWsoDVkikPAGiDf3Zd22cQfibF6cbkvQ2Jtfe-HFmekXVmXuulWizvKO3HzlbevR5SfVKtAGe3WCqm8d3Bbantsi1jDGpXAdst613vKSGdcFMzEimQmvPkqJ8JoVooHo8_SH0ruDX1hDgZnjqxAoqT1_4P_dvR42ubjFwZjfQuMA1iisJkv1t1b_fE5jK9AMWxDbJmdIHJYjnrTDxYZyTFsgD-e8iFyxFOvVd8Sp4AZrCjPEk0PaD8d'
+        
         if token:
             sp = spotipy.Spotify(auth=token)
             sp.trace = False
-            playlist = sp.user_playlist('sanna_19', '6n3iKhvGFFW4j0GbwcvCBa')
+            playlist = sp.user_playlist('sanna_19', playlist)
             songs = playlist['tracks']
             song = songs['items']
             for i in song:
@@ -29,8 +29,6 @@ class Playlist:
             print "Can't get token for", username
         
        
-        for song in self.array_of_songs_in_playlist:
-            print song['name']
         
         matching_categories = []
 
@@ -85,15 +83,29 @@ class MatchingCategorySong(MatchingCategory):
 def merge_matching_categories(*matching_categories):
     merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes(*matching_categories)
 
-    return merging_algorithm(*matching_categories)
+    return merging_algorithm
 
 def merge_playlists(*playlists):
     merging_algorithm = MergingAlgorithms.pl_best(*playlists)
 
     return merging_algorithm(*playlists)
 def menu():
-    playlist = Playlist()
-    mc = MatchingCategorySong(playlist)
-    print(mc.playlist_data)
+    
+    playlist1 = Playlist('3BVqFufvKtRenYZjG9y3to')
+    playlist2 = Playlist('7jqQCJtZsORrU5X2rK9px0')
+    playlist3 = Playlist('1hNFR8Y66XAibRx5xDnYiZ')
+
+
+    mc1 = MatchingCategorySong(playlist1)
+    mc2 = MatchingCategorySong(playlist2)
+    mc3 = MatchingCategorySong(playlist3)
+
+
+    #print(mc1.playlist_data)
+    #print(mc2.playlist_data)
+
+    print merge_matching_categories(mc1, mc2, mc3)
+    
+    
 
 menu()

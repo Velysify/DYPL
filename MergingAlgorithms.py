@@ -4,11 +4,11 @@ def mc_based_on_common_tastes(*matching_categories):
     #Hopelessly ugly and ineffective, should be rewritten
     merged_matching_category = {}
     for mc in matching_categories:
-        for entry in mc.keys():
+        for entry in mc.playlist_data.keys():
             if entry in merged_matching_category:
-                merged_matching_category[entry][0] += mc[entry][0]
+                merged_matching_category[entry][0] += mc.playlist_data[entry][0]
             else:
-                merged_matching_category[entry] = mc[entry]
+                merged_matching_category[entry] = mc.playlist_data[entry]
 
     for entry in merged_matching_category.keys():
         if merged_matching_category[entry][0]<2:
