@@ -1,4 +1,4 @@
-import PlaylistGeneratorAlgorithms
+﻿import PlaylistGeneratorAlgorithms
 import MergingAlgorithms
 import spotipy
 import spotipy.util as util
@@ -81,6 +81,62 @@ class MatchingCategorySong(MatchingCategory):
                 playlist_analysis[artist_song_identifier] = item
             else:
                 value = playlist_analysis.get(artist_song_identifier)
+                new_value= value[0]+1
+                value[0] = new_value
+                
+        return playlist_analysis
+
+class MatchingCategoryAlbum(MatchingCategory):
+
+    def __init__(self, playlist):
+        self.playlist_data = {}
+        self.playlist_data = self.analyze_playlist(playlist)
+
+        #MatchingCategory.__init__(self, playlist)
+
+    def analyze_playlist(self, playlist):
+        #Creates the dictionary object to return
+        playlist_analysis = {}
+
+        for track in playlist.array_of_songs_in_playlist:
+            #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
+            #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
+            album_identifier = str(track['album']['name'])
+            if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
+                item = []
+                item.append(1)
+                item.append(track['album']['name'])
+                playlist_analysis[album_identifier] = item
+            else:
+                value = playlist_analysis.get(album_identifier)
+                new_value= value[0]+1
+                value[0] = new_value
+                
+        return playlist_analysis
+
+class MatchingCategoryArtist(MatchingCategory):
+
+    def __init__(self, playlist):
+        self.playlist_data = {}
+        self.playlist_data = self.analyze_playlist(playlist)
+
+        #MatchingCategory.__init__(self, playlist)
+
+    def analyze_playlist(self, playlist):
+        #Creates the dictionary object to return
+        playlist_analysis = {}
+
+        for track in playlist.array_of_songs_in_playlist:
+            #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
+            #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
+            artist_identifier = str(track['artist'][0]['name'])
+            if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
+                item = []
+                item.append(1)
+                item.append(track['album'][0]['name'])
+                playlist_analysis[artist_identifier] = item
+            else:
+                value = playlist_analysis.get(artist_identifier)
                 new_value= value[0]+1
                 value[0] = new_value
                 
