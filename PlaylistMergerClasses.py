@@ -133,7 +133,7 @@ class MatchingCategoryArtist(MatchingCategory):
             if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['album'][0]['name'])
+                item.append(track['artist'][0]['name'])
                 playlist_analysis[artist_identifier] = item
             else:
                 value = playlist_analysis.get(artist_identifier)
