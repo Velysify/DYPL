@@ -129,11 +129,11 @@ class MatchingCategoryArtist(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            artist_identifier = str(track['artist'][0]['name'])
+            artist_identifier = str(track['artists'][0]['name'])
             if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['artist'][0]['name'])
+                item.append(track['artists'][0]['name'])
                 playlist_analysis[artist_identifier] = item
             else:
                 value = playlist_analysis.get(artist_identifier)
