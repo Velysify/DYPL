@@ -29,7 +29,8 @@ def pl_supre_best_algorith_ever(*playlists):
     unmerged_matching_categories_for_new_playlist = []
     counter = 0
     for playlist in playlists:
-        unmerged_matching_categories_for_new_playlist[counter] = []
+        print counter
+        unmerged_matching_categories_for_new_playlist.append([])
         for x in playlist.matching_categories:
             unmerged_matching_categories_for_new_playlist[counter].append(x)
 
@@ -37,7 +38,7 @@ def pl_supre_best_algorith_ever(*playlists):
 
     counter = 0
     for entry in unmerged_matching_categories_for_new_playlist:
-        merged_matching_categories_for_new_playlist[counter] = PlaylistMergerClasses.merge_matching_categories(entry)
+        merged_matching_categories_for_new_playlist.append( PlaylistMergerClasses.merge_matching_categories(*entry))
 
     merged_playlist.matching_categories = merged_matching_categories_for_new_playlist
 
