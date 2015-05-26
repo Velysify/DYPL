@@ -14,18 +14,18 @@ class Playlist:
         self.array_of_songs_in_playlist = []
         self.matching_categories = []
 
+
         if (option == 1):
             #change the method to one with return typ instead
-            self.fill_up_array_of_songs_in_playlist(playlist)
+            self.fill_up_array_of_songs_in_playlist(self.playlist)
 
-        self.generate_matching_categories()
+        #self.generate_matching_categories()
+            
+        create_matching_categories(self)
 
     def fill_up_array_of_songs_in_playlist(self, playlist):
-        token = 'BQDTQhtVPfIdE1sZMV-0Yg1_CHKa73kh-90O_c4P2TIuKaubLSdBT8iFs8x31UdN8dwZ3ghQ-0jP7AQIYWa2fPkxhT2lSBnnCM_Fk2f58ExraiNUQWlV5tNQdLqRHXWcFatoD2IS4MAEXdpFmU9ZTDObxwA4v9Maub_xBytK7IpYM__IyaUUJxmZkGn_5vpvnRGQcOY11-C_2df2f__58AghSHy-AfMRanersd1mgkBdDW4kRMKcHoTcntXCsQsrXwy4r6TTTmdmcTdayafkCj5B6kdFNlRH6-HFEzedJBfX'
-
-
-        if token:
-            sp = spotipy.Spotify(auth=token)
+        if self.token:
+            sp = spotipy.Spotify(auth=self.token)
             sp.trace = False
             playlist = sp.user_playlist(self.username, self.playlist)
             songs = playlist['tracks']
@@ -35,28 +35,27 @@ class Playlist:
                 self.array_of_songs_in_playlist.append(i)
 
         else:
-            print "Can't get token for",
+            print "Can't get token for", username
 
-    def generate_matching_categories(self):
+
+    """def generate_matching_categories(self):
         #hardkodat, se till att det gar att konfigurera @ runtime
 
 
         new_matching_category = MatchingCategorySong(self)
-
-
-        self.matching_categories.append(new_matching_category)
+        self.matching_categories.append(new_matching_category)"""
 
 
     def generate_playlist(self):
         pass
 
-class MatchingCategory:
+class MatchingCategory(object):
 
     def __init__(self, playlist):
         self.playlist_data = {}
         self.playlist_data = analyze_playlist(playlist)
         self.harmony_rating = 0
-        
+
         #playlist_data should always be implemented as a dictionary with a string as a key and a list as value.
         #The key string represents the item of each category (genre names for a genre category, artist names for an artist category, etc.)
         #The first value of the list should always be an inte representing the "weight" of each item
@@ -172,7 +171,7 @@ class MatchingCategoryGenre(MatchingCategory):
                     genre = genre.group(0).strip(",").replace(']', "").replace(' "',"").replace('" ', "").split("[")
                     if genre[1] == " ":
                         genre[1] = None
-                    if genre[1]
+                    if genre[1]:
                         if genre[1] not in self.playlist_data.keys() and genre[1] not in playlist_analysis.keys():
                             item = []
                             item.append(1)
@@ -184,6 +183,11 @@ class MatchingCategoryGenre(MatchingCategory):
                             value[0] = new_value
                             
         return playlist_analysis
+
+def create_matching_categories(playlist):
+        categories = [cls for cls in eval('MatchingCategory').__subclasses__()]
+        for category in categories:
+            category(playlist)
 
                 
 def merge_matching_categories(*matching_categories):
@@ -197,34 +201,35 @@ def merge_playlists(*playlists):
     return merging_algorithm(*playlists)
 
 
-def menu(self):
+#def menu(self):
     
-    playlist1 = Playlist('3BVqFufvKtRenYZjG9y3to', 1)
-    playlist2 = Playlist('7jqQCJtZsORrU5X2rK9px0', 1)
-    playlist3 = Playlist('1hNFR8Y66XAibRx5xDnYiZ', 1)
+def menu():
+    #username = input("Please enter your spotify username")
+    #token = input("Copy the acesstoken into the program")
+    #playlist = input("Enter the URI of first playlist to be merged")
+    token = 'BQA7Rlv4E7BkzeaK3AVX2zbonxjwWdkJhNJfiJdOhrK4Zx7Tbp9nNGyplYRwEWix33wOPLIfb4Dp0EGBbz4NkSoGDxpQ5AEdIdpvnvFXcnGt4l_3R_Q3LG9twBOzbrE4KIC9meUrsupu7Fu4dBtfSX2KraFSyfh2s1d5a7YKAvu2ZjHqF6CDv-p4KsW6DtDc3gs52UNDaTRR1WCyNJTtq37kAZEk70_xGaN3CxTqGwU2g7qL5YVOSXy4e6JLHdiErhhO1qUZjvWzc2kQh_40lhqor9EcWkbyYF94QLyvVlks'
+    username = 'sanna_19' #Token and username are test data
+    #option = input("How do you want to merge the playlists?"
+    spotify = spotipy.Spotify(auth=token)
+    playlists = []
+    '''while playlist:
+            playlists.append(Playlist.token, username, playlist)
+            playlist = input("Enter the next URI")
+            if playlist = ""
+                playlist = None
+        '''
+    #The playlists added below are testdata
+    playlists.append(Playlist(token, username, '3BVqFufvKtRenYZjG9y3to', 1))
+    playlists.append(Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0', 1))
+    #playlists.append(Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ', 1))
 
-
-    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
-
-
-    mc1 = MatchingCategoryArtist(playlist1)
-    mc2 = MatchingCategoryArtist(playlist2)
-    mc3 = MatchingCategoryArtist(playlist3)
-
-
-    #print merge_matching_categories(mc1, mc2, mc3)
-
-
-    #print(mc1.playlist_data)
-    #print(mc2.playlist_data)
-
-
-    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
-    
+    merging_list = []
+        
     for playlist in playlists:
-        mc = MatchingCategoryGenre(playlist)
         merging_list.extend(playlist.matching_categories)
 
+    print merge_matching_categories(*merging_list)
 
+menu()
 #menu(menu)
 

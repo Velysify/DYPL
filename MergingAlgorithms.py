@@ -1,5 +1,5 @@
 import unittest
-import PlaylistMergerClasses
+#import PlaylistMergerClasses
 
 
 def mc_based_on_common_tastes(*matching_categories):
