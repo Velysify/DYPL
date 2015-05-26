@@ -165,7 +165,6 @@ class MatchingCategoryGenre(MatchingCategory):
                         if not genre[1] == " ":
                             genres = genre[1].replace('"',"").split(",")
                             for genre in genres:
-                                print genre
                                 if genre not in self.playlist_data.keys() and genre not in playlist_analysis.keys():
                                     item = []
                                     item.append(1)
