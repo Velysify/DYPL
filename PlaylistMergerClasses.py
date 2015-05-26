@@ -19,8 +19,8 @@ class Playlist:
             self.fill_up_array_of_songs_in_playlist(playlist)
 
     def fill_up_array_of_songs_in_playlist(self, playlist):
-
-        token = 'BQDmWYSzE-cb-rl7rMovBOJGiukBNF5uz11IQrMfltrVxuD4zHeGyXt4gQHM1jrADvuppFZQGuKk1L_L3MRcBUykBk-M9N71Fe2skzzboy_4fBqXsoyGfqWA8yLYJdh2aMFVujtnuQSFmH74w7RKYs6fMlc2mELjud0qnU0zU_CEHZAyPxFsRmowO5VatV1WE2zW0UQDS5BRGfnF5BjN95qrKqa9ZSUN_uPOUC53ud0sF26VEoEuMqLfCy2EsEeEavXMeP4I1RiDI7OfjGbHxQT12B9evb84IG51gx2jrkRD'
+        
+        token = 'BQAqc-heLjGS_pJCofp_dum2NZvHJju87cutIi5usHgotbhi1jXzxdBubNlNlDUM8pb0aT2NX9prpldck0mkiPKtfFz-VZvGd-AxAWpgkcgP9hJ-7Fu4FXo7yEnLH7pRraVJ0nYUScbc8vscpq1pwKdWraTLru07cSmLL41DBdWt-uI060LQ0yu4TmdPA69mfhdSQ-wNjga8-muwmqpxsG7Luc_A8nocaJyztTW5ChCh_4wK6ONUvW0J6mF9VhuDEjs2iqosmFH9x6h4ZW2RpN3K7bmACBVLdgqjk_eC0l27'
 
         if token:
             sp = spotipy.Spotify(auth=token)
