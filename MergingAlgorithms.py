@@ -1,9 +1,10 @@
 import unittest
-#import PlaylistMergerClasses
+import PlaylistMergerClasses
+
 
 def mc_based_on_common_tastes(*matching_categories):
     #Returns a matching_category containing only the songs present in all of the playlists
-    #Hopelessly ugly and ineffective, should be rewritten
+    #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
     for mc in matching_categories:
         for entry in mc.playlist_data.keys():
@@ -29,7 +30,6 @@ def pl_supre_best_algorith_ever(*playlists):
     unmerged_matching_categories_for_new_playlist = []
     counter = 0
     for playlist in playlists:
-        print counter
         unmerged_matching_categories_for_new_playlist.append([])
         for x in playlist.matching_categories:
             unmerged_matching_categories_for_new_playlist[counter].append(x)

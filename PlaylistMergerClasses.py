@@ -16,19 +16,13 @@ class Playlist:
         self.matching_categories = []
 
         if (option == 1):
-<<<<<<< HEAD
             #change the method to one with return typ instead
             self.fill_up_array_of_songs_in_playlist(playlist)
 
-    def fill_up_array_of_songs_in_playlist(self, playlist):
-        token = 'BQAqc-heLjGS_pJCofp_dum2NZvHJju87cutIi5usHgotbhi1jXzxdBubNlNlDUM8pb0aT2NX9prpldck0mkiPKtfFz-VZvGd-AxAWpgkcgP9hJ-7Fu4FXo7yEnLH7pRraVJ0nYUScbc8vscpq1pwKdWraTLru07cSmLL41DBdWt-uI060LQ0yu4TmdPA69mfhdSQ-wNjga8-muwmqpxsG7Luc_A8nocaJyztTW5ChCh_4wK6ONUvW0J6mF9VhuDEjs2iqosmFH9x6h4ZW2RpN3K7bmACBVLdgqjk_eC0l27'
-=======
-            self.fill_up_array_of_songs_in_playlist(playlist)
+        self.generate_matching_categories()
 
     def fill_up_array_of_songs_in_playlist(self, playlist):
-
-        token = 'BQDmWYSzE-cb-rl7rMovBOJGiukBNF5uz11IQrMfltrVxuD4zHeGyXt4gQHM1jrADvuppFZQGuKk1L_L3MRcBUykBk-M9N71Fe2skzzboy_4fBqXsoyGfqWA8yLYJdh2aMFVujtnuQSFmH74w7RKYs6fMlc2mELjud0qnU0zU_CEHZAyPxFsRmowO5VatV1WE2zW0UQDS5BRGfnF5BjN95qrKqa9ZSUN_uPOUC53ud0sF26VEoEuMqLfCy2EsEeEavXMeP4I1RiDI7OfjGbHxQT12B9evb84IG51gx2jrkRD'
->>>>>>> 6a09574a15147abd299dde119d5e32be2af03bb7
+        token = 'BQDTQhtVPfIdE1sZMV-0Yg1_CHKa73kh-90O_c4P2TIuKaubLSdBT8iFs8x31UdN8dwZ3ghQ-0jP7AQIYWa2fPkxhT2lSBnnCM_Fk2f58ExraiNUQWlV5tNQdLqRHXWcFatoD2IS4MAEXdpFmU9ZTDObxwA4v9Maub_xBytK7IpYM__IyaUUJxmZkGn_5vpvnRGQcOY11-C_2df2f__58AghSHy-AfMRanersd1mgkBdDW4kRMKcHoTcntXCsQsrXwy4r6TTTmdmcTdayafkCj5B6kdFNlRH6-HFEzedJBfX'
 
         if token:
             sp = spotipy.Spotify(auth=token)
@@ -46,7 +40,11 @@ class Playlist:
     def generate_matching_categories(self):
         #hardkodat, se till att det gar att konfigurera @ runtime
 
-        self.matching_categories[0] = MatchingCategorySong(self)
+        new_matching_category = MatchingCategorySong(self)
+
+
+        self.matching_categories.append(new_matching_category)
+
     def generate_playlist(self):
         pass
 
@@ -61,9 +59,10 @@ class MatchingCategory:
         #The first value of the list should always be an inte representing the "weight" of each item
         self.playlist_data = {}
 
+    #Returns an array of Spotify songs, later used by the Playlist-object to create a Spotify playlist
     def generate_playlist(self):
         pass
-
+    #Analyzes the array of songs (passed as the parameter 'playlist'), returns a dictionary with keys and weights to be stored in the playlist_data variable
     def analyze_playlist(playlist):
         pass
 
@@ -79,6 +78,7 @@ class MatchingCategorySong(MatchingCategory):
         #Creates the dictionary object to return
         playlist_analysis = {}
 
+
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
@@ -92,7 +92,7 @@ class MatchingCategorySong(MatchingCategory):
                 value = playlist_analysis.get(artist_song_identifier)
                 new_value= value[0]+1
                 value[0] = new_value
-                
+
         return playlist_analysis
 
 class MatchingCategoryAlbum(MatchingCategory):
@@ -155,7 +155,6 @@ def merge_matching_categories(*matching_categories):
     merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
 
     return merging_algorithm(*matching_categories)
-    #return MergingAlgorithms.mc_based_on_common_tastes(*matching_categories)
 
 def merge_playlists(*playlists):
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
@@ -167,34 +166,24 @@ def menu(self):
     playlist1 = Playlist('3BVqFufvKtRenYZjG9y3to', 1)
     playlist2 = Playlist('7jqQCJtZsORrU5X2rK9px0', 1)
     playlist3 = Playlist('1hNFR8Y66XAibRx5xDnYiZ', 1)
-<<<<<<< HEAD
-=======
 
->>>>>>> 6a09574a15147abd299dde119d5e32be2af03bb7
 
-#    merged_playlist = self.merge_playlist(playlist1, playlist2, playlist3)
-
-<<<<<<< HEAD
     merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
-=======
+
+
     mc1 = MatchingCategoryArtist(playlist1)
     mc2 = MatchingCategoryArtist(playlist2)
     mc3 = MatchingCategoryArtist(playlist3)
->>>>>>> 6a09574a15147abd299dde119d5e32be2af03bb7
 
-    print merge_matching_categories(mc1, mc2, mc3)
+    #print merge_matching_categories(mc1, mc2, mc3)
 
 
     #print(mc1.playlist_data)
     #print(mc2.playlist_data)
 
-<<<<<<< HEAD
-    print merge_matching_categories(mc1,mc2,mc3)
-    print merged_playlist.matching_categories
-=======
-#    print merged_playlist.matching_categories
+
+    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
     
     
 
-menu(menu)
->>>>>>> 6a09574a15147abd299dde119d5e32be2af03bb7
+#menu(menu)
