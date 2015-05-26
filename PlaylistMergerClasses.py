@@ -1,4 +1,4 @@
-﻿import PlaylistGeneratorAlgorithms
+import PlaylistGeneratorAlgorithms
 import MergingAlgorithms
 import spotipy
 import spotipy.util as util
@@ -23,6 +23,7 @@ class Playlist:
 
     def fill_up_array_of_songs_in_playlist(self, playlist):
         token = 'BQDTQhtVPfIdE1sZMV-0Yg1_CHKa73kh-90O_c4P2TIuKaubLSdBT8iFs8x31UdN8dwZ3ghQ-0jP7AQIYWa2fPkxhT2lSBnnCM_Fk2f58ExraiNUQWlV5tNQdLqRHXWcFatoD2IS4MAEXdpFmU9ZTDObxwA4v9Maub_xBytK7IpYM__IyaUUJxmZkGn_5vpvnRGQcOY11-C_2df2f__58AghSHy-AfMRanersd1mgkBdDW4kRMKcHoTcntXCsQsrXwy4r6TTTmdmcTdayafkCj5B6kdFNlRH6-HFEzedJBfX'
+
 
         if token:
             sp = spotipy.Spotify(auth=token)
@@ -175,6 +176,7 @@ def menu(self):
     mc2 = MatchingCategoryArtist(playlist2)
     mc3 = MatchingCategoryArtist(playlist3)
 
+
     #print merge_matching_categories(mc1, mc2, mc3)
 
 
@@ -187,3 +189,4 @@ def menu(self):
     
 
 #menu(menu)
+
