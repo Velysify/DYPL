@@ -1,4 +1,4 @@
-﻿import PlaylistGeneratorAlgorithms
+import PlaylistGeneratorAlgorithms
 import MergingAlgorithms
 import spotipy
 import spotipy.util as util
@@ -16,10 +16,11 @@ class Playlist:
         self.matching_categories = []
 
         if (option == 1):
+
+            #change the method to one with return typ instead
             self.fill_up_array_of_songs_in_playlist(playlist)
 
     def fill_up_array_of_songs_in_playlist(self, playlist):
-        
         token = 'BQAqc-heLjGS_pJCofp_dum2NZvHJju87cutIi5usHgotbhi1jXzxdBubNlNlDUM8pb0aT2NX9prpldck0mkiPKtfFz-VZvGd-AxAWpgkcgP9hJ-7Fu4FXo7yEnLH7pRraVJ0nYUScbc8vscpq1pwKdWraTLru07cSmLL41DBdWt-uI060LQ0yu4TmdPA69mfhdSQ-wNjga8-muwmqpxsG7Luc_A8nocaJyztTW5ChCh_4wK6ONUvW0J6mF9VhuDEjs2iqosmFH9x6h4ZW2RpN3K7bmACBVLdgqjk_eC0l27'
 
         if token:
@@ -33,10 +34,10 @@ class Playlist:
                 self.array_of_songs_in_playlist.append(i)
 
         else:
-            print "Can't get token for", username
+            print "Can't get token for",
 
     def generate_matching_categories(self):
-        #hårdkodat, se till att det går att konfigurera @ runtime
+        #hardkodat, se till att det gar att konfigurera @ runtime
 
         self.matching_categories[0] = MatchingCategorySong(self)
     def generate_playlist(self):
@@ -150,7 +151,7 @@ def merge_matching_categories(*matching_categories):
     #return MergingAlgorithms.mc_based_on_common_tastes(*matching_categories)
 
 def merge_playlists(*playlists):
-    merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever(*playlists)
+    merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
 
     return merging_algorithm(*playlists)
 
@@ -160,12 +161,8 @@ def menu(self):
     playlist2 = Playlist('7jqQCJtZsORrU5X2rK9px0', 1)
     playlist3 = Playlist('1hNFR8Y66XAibRx5xDnYiZ', 1)
 
+    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
 
-#    merged_playlist = self.merge_playlist(playlist1, playlist2, playlist3)
-
-    mc1 = MatchingCategoryArtist(playlist1)
-    mc2 = MatchingCategoryArtist(playlist2)
-    mc3 = MatchingCategoryArtist(playlist3)
 
     print merge_matching_categories(mc1, mc2, mc3)
 
@@ -173,8 +170,7 @@ def menu(self):
     #print(mc1.playlist_data)
     #print(mc2.playlist_data)
 
-#    print merged_playlist.matching_categories
-    
-    
+    print merge_matching_categories(mc1,mc2,mc3)
+    print merged_playlist.matching_categories
 
 menu(menu)
