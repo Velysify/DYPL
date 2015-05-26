@@ -2,26 +2,29 @@ import PlaylistGeneratorAlgorithms
 import MergingAlgorithms
 import urllib2
 import re
+import time
 import spotipy
 import spotipy.util as util
 
 class Playlist:
 
-    def __init__(self, token, username, playlist, option):
-        self.token = token
-        self.username = username
-        self.playlist = playlist
-        self.array_of_songs_in_playlist = []
-        self.matching_categories = []
+    def __init__(self, token, username, playlist):
+        if playlist:
+            self.token = token
+            self.username = username
+            self.playlist = playlist
+            self.array_of_songs_in_playlist = []
+            self.matching_categories = []
 
-
-        if (option == 1):
-            #change the method to one with return typ instead
             self.fill_up_array_of_songs_in_playlist(self.playlist)
 
-        #self.generate_matching_categories()
-            
-        create_matching_categories(self)
+            create_matching_categories(self)
+
+        #When creating a new playlist for generating playlists.     
+        else:
+            self.token = token
+            self.username = username
+            self.matching_categories = []
 
     def fill_up_array_of_songs_in_playlist(self, playlist):
         if self.token:
@@ -37,20 +40,12 @@ class Playlist:
         else:
             print "Can't get token for", username
 
-
-    """def generate_matching_categories(self):
-        #hardkodat, se till att det gar att konfigurera @ runtime
-
-
-        new_matching_category = MatchingCategorySong(self)
-        self.matching_categories.append(new_matching_category)"""
-
-
     def generate_playlist(self):
         pass
 
 class MatchingCategory(object):
-
+    pass
+    """
     def __init__(self, playlist):
         self.playlist_data = {}
         self.playlist_data = analyze_playlist(playlist)
@@ -67,20 +62,18 @@ class MatchingCategory(object):
     #Analyzes the array of songs (passed as the parameter 'playlist'), returns a dictionary with keys and weights to be stored in the playlist_data variable
     def analyze_playlist(playlist):
         pass
-
+    """
 class MatchingCategorySong(MatchingCategory):
 
     def __init__(self, playlist):
         self.playlist_data = {}
         self.playlist_data = self.analyze_playlist(playlist)
-        playlist.matching_categories.append(self)
 
         #MatchingCategory.__init__(self, playlist)
 
     def analyze_playlist(self, playlist):
         #Creates the dictionary object to return
         playlist_analysis = {}
-
 
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
@@ -158,37 +151,43 @@ class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist):
         self.playlist_data = {}
         self.playlist_data = self.analyze_playlist(playlist)
-        playlist.matching_categories.append(self)
 
-        
     def analyze_playlist(self,playlist):
         playlist_analysis = {}
         for track in playlist.array_of_songs_in_playlist:
-            href = track['artists'][0]['href']
-            for line in urllib2.urlopen(href):
-                genre = re.search('\"\s*genres\" \: .*', line)
-                if genre:
-                    genre = genre.group(0).strip(",").replace(']', "").replace(' "',"").replace('" ', "").split("[")
-                    if genre[1] == " ":
-                        genre[1] = None
-                    if genre[1]:
-                        if genre[1] not in self.playlist_data.keys() and genre[1] not in playlist_analysis.keys():
-                            item = []
-                            item.append(1)
-                            item.append('Not Used')
-                            playlist_analysis[genre[1]] = item
-                        else:
-                            value = playlist_analysis.get(genre[1])
-                            new_value = value[0] +1
-                            value[0] = new_value
-                            
+            #To catch and wait for HTTP: 429 
+            try:
+                href = track['artists'][0]['href']
+                for line in urllib2.urlopen(href):
+                    genre = re.search('\"\s*genres\" \: .*', line)
+                    if genre:
+                        genre = genre.group(0).strip(",").replace(']', "").replace(' "',"").replace('" ', "").split("[")
+                        if not genre[1] == " ":
+                            genres = genre[1].replace('"',"").split(",")
+                            for genre in genres:
+                                print genre
+                                if genre not in self.playlist_data.keys() and genre not in playlist_analysis.keys():
+                                    item = []
+                                    item.append(1)
+                                    item.append(None)
+                                    playlist_analysis[genre] = item
+                                else:
+                                    value = playlist_analysis.get(genre)
+                                    new_value = value[0] +1
+                                    value[0] = new_value
+            except urllib2.HTTPError, err:
+                if err.code == 429:
+                    time.sleep(float(err.hdrs.get('Retry-After')))         
+                else:
+                    raise
+                                
         return playlist_analysis
 
 def create_matching_categories(playlist):
-        categories = [cls for cls in eval('MatchingCategory').__subclasses__()]
-        for category in categories:
-            category(playlist)
-
+    #Finds all Subclasses of MatchingCategory, initzialise it with the entered playlist and adds it to the list.
+    categories = [cls for cls in eval('MatchingCategory').__subclasses__()]
+    for category in categories:
+        playlist.matching_categories.append(category(playlist))
                 
 def merge_matching_categories(*matching_categories):
     merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
@@ -204,10 +203,10 @@ def merge_playlists(*playlists):
 #def menu(self):
     
 def menu():
-    #username = input("Please enter your spotify username")
-    #token = input("Copy the acesstoken into the program")
-    #playlist = input("Enter the URI of first playlist to be merged")
-    token = 'BQA7Rlv4E7BkzeaK3AVX2zbonxjwWdkJhNJfiJdOhrK4Zx7Tbp9nNGyplYRwEWix33wOPLIfb4Dp0EGBbz4NkSoGDxpQ5AEdIdpvnvFXcnGt4l_3R_Q3LG9twBOzbrE4KIC9meUrsupu7Fu4dBtfSX2KraFSyfh2s1d5a7YKAvu2ZjHqF6CDv-p4KsW6DtDc3gs52UNDaTRR1WCyNJTtq37kAZEk70_xGaN3CxTqGwU2g7qL5YVOSXy4e6JLHdiErhhO1qUZjvWzc2kQh_40lhqor9EcWkbyYF94QLyvVlks'
+    #username = input("Please enter your spotify username: ")
+    #token = input("Copy the access token into the program: ")
+    #playlist = input("Enter the URI of first playlist to be merged: ")
+    token = 'BQAw5Cc88kGLtAzletv1qT3xvF2NGqfJE_ud2tTtab9azV5fVRnHCXB99IMczyfhkwJOFCsksOAaPjZCy8PomOAnwHyWNRddkcmsQppck4pLK0bv27_0DXNMZBY1cTiIqpxttUelPXKzNMzLRIXPEPO-_81wB0QwF37SM6axuBDak55RMqmmeowXp56zYwfJaXvRhHyKdZkMoAUO4g7dC2LQNRdiu2eSy23Sh2lta_Cfmgvdo_1Pn0gguVev9eIBw28xM7dYR0gSR2g5coEby-oIftflGKDJFfPQHMc02fhd'
     username = 'sanna_19' #Token and username are test data
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
@@ -219,10 +218,10 @@ def menu():
                 playlist = None
         '''
     #The playlists added below are testdata
-    playlists.append(Playlist(token, username, '3BVqFufvKtRenYZjG9y3to', 1))
-    playlists.append(Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0', 1))
-    #playlists.append(Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ', 1))
-
+    playlists.append(Playlist(token, username, '3BVqFufvKtRenYZjG9y3to'))
+    playlists.append(Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0'))
+    playlists.append(Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ'))
+    #playlists.append(Playlist(token, username, None))
     merging_list = []
         
     for playlist in playlists:
