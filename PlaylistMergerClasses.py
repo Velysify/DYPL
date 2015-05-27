@@ -15,8 +15,6 @@ class Playlist:
             self.playlist = playlist
             self.array_of_songs_in_playlist = []
             self.matching_categories = []
-
-
             self.fill_up_array_of_songs_in_playlist(self.playlist)
 
             create_matching_categories(self)
@@ -41,7 +39,7 @@ class Playlist:
         else:
             print "Can't get token for",
 
-    def generate_matching_categories(self):
+    """def generate_matching_categories(self):
         #hardkodat, se till att det gar att konfigurera @ runtime
         print "generating matching categories"
 
@@ -50,7 +48,7 @@ class Playlist:
 
         self.matching_categories.append(new_matching_category_song)
         self.matching_categories.append(new_matching_category_artist)
-
+    """
 
 
     def generate_playlist(self):
@@ -170,8 +168,9 @@ class MatchingCategoryGenre(MatchingCategory):
         playlist_analysis = {}
         for track in playlist.array_of_songs_in_playlist:
 
-            #To catch and wait for HTTP: 429 
+            #Try until HTTP Error 429: Too many requests is raises.
             try:
+                #For each line in the href: look for genres and clean them to make searchable strings.
                 href = track['artists'][0]['href']
                 for line in urllib2.urlopen(href):
                     genre = re.search('\"\s*genres\" \: .*', line)
@@ -189,6 +188,7 @@ class MatchingCategoryGenre(MatchingCategory):
                                     value = playlist_analysis.get(genre)
                                     new_value = value[0] +1
                                     value[0] = new_value
+            #When Error 429 is raised read the servers reply and wait for that many seconds before continuing.                        
             except urllib2.HTTPError, err:
                 if err.code == 429:
                     time.sleep(float(err.hdrs.get('Retry-After')))         
@@ -199,7 +199,7 @@ class MatchingCategoryGenre(MatchingCategory):
 
 def create_matching_categories(playlist):
     #Finds all Subclasses of MatchingCategory, initzialise it with the entered playlist and adds it to the list.
-    categories = [cls for cls in eval('MatchingCategory').__subclasses__()]
+    categories = [cls for cls in MatchingCategory.__subclasses__()]
     for category in categories:
         playlist.matching_categories.append(category(playlist))
                 
@@ -209,44 +209,40 @@ def merge_matching_categories(*matching_categories):
     return merging_algorithm(*matching_categories)
 
 def merge_playlists(*playlists):
-    new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
-    for index in playlists[0].matching_categories.length:
-        categories_to_be_matched = []
-        for playlist in playlists:
-            categories_to_be_matched.append(playlist.matching_categories(index))
-        new_playlist.matching_categories.append(merge_matching_categories(categories_to_be_matched))
-        
-    merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
+    #Create new playlist with the same username and token as the other playlists.
+    new_playlist = Playlist(playlists[0][0].token, playlists[0][0].username, None)
 
-    return merging_algorithm(*playlists)
+    #Merge the playlists    
+    merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
+    return merging_algorithm(new_playlist, *playlists)
 
 
 def menu(self):
+    #username = input("Please enter your spotify username: ")
+    #token = input("Copy the access token into the program: ")
+    #playlist = input("Enter the URI of first playlist to be merged: ")
+    token = 'BQB5PQ1q7d19nghFbP_z4Q-88bCYTpal7b1yRBJWetMCphE2Ikwv812if4fzqzLuRx725blJ9J2vgoZKaFtd5Nh2MEYMp8ybITXGeGyd_K0UALxGDbMFF4-rXG93dgObzaCpdTY55D6K8Id8LXRMsmsfZV3de9hp_mwgsQLFjGIjfV67uGOfjcZ4HcXut2T-2GHJbCTE5tyWXOA4uQNHhg7q86QFJmE2u2Omm_f5ZF1etVvh'
+    username = 'velys' #Token and username are testdata
+    #option = input("How do you want to merge the playlists?"
+    spotify = spotipy.Spotify(auth=token)
+    playlists = []
+    '''while playlist:
+            playlists.append(Playlist.token, username, playlist)
+            playlist = input("Enter the next URI")
+            if playlist = ""
+                playlist = None
+        '''
+    #The playlists added below are testdata
+    """
+    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:2aDpdr0r4qP6YNp2227CIi'))
+    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
+    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
+    """
+    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
+    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3jeoIpQpRdDrPskLdcRVW0'))
+    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:0FK7E35FEHnvIGZZeN6wqG'))
+    #playlists.append(Playlist(token, username, None))
 
-
-    token = 'BQCS8QZ1tVR1Kk-sFt6UmHHDq-q2HJ6YMG1NKzzLO5G20wkES1PG-IgREEcrv4J4cTqTLyy6KognA0Qd4BUAMgAQORR7v5cFh6hm8qcJja79j6y1sOvUBC7ZNtquKU1mJz9ZMUMJ3LhBvpotVgpdmCxyGOD2t5Xl4VLjKFLnUIGa-nSFOWSVPOzI8P8foq5EJO12kSsxBjQaDApXhdSdL8quzMSIY9x4Q8ujTXH9qVV1vysiSNYCfrmiBSoQBLPpeXh7yUClJhD1OBEvEFcYjF2hm1PH93reheDx0OYpqlWa'
-    username = "sanna_19"
-    playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to", 1)
-    playlist2 = Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0', 1)
-    playlist3 = Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ', 1)
-
-    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
-
-
-    mc1 = MatchingCategorySong(playlist1)
-    mc2 = MatchingCategorySong(playlist2)
-    mc3 = MatchingCategorySong(playlist3)
-
-
-    #print(mc1.playlist_data)
-    #print(mc2.playlist_data)
-
-
-    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
-
-
-
-
-menu()
+    print merge_playlists(playlists).matching_categories
 #menu(menu)
 
