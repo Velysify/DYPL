@@ -53,8 +53,13 @@ class Playlist:
 
     def generate_playlist(self):
 
+        main_krover = []
+
         for category in self.matching_categories:
-            category.generate_playlist
+            krover = category.generate_playlist()
+            main_krover.extend(krover)
+        return main_krover
+            
 
 class MatchingCategory(object):
     pass
@@ -107,11 +112,12 @@ class MatchingCategorySong(MatchingCategory):
 
     def generate_playlist(self):
 
-        self.songs_from_song_list = []
+        self.song_list = []
 
         for key in self.playlist_data.keys():
             tmplist = self.playlist_data.get(key)
-            self.songs_from_song_list.append(tmplist[1])
+            self.song_list.append(tmplist[1])
+        return self.song_list
 
 class MatchingCategoryAlbum(MatchingCategory):
 
@@ -143,7 +149,8 @@ class MatchingCategoryAlbum(MatchingCategory):
 
     def generate_playlist(self):
 
-        self.songs_from_album_list = PlaylistGeneratorAlgorithms.funky_album_algorithm(self.playlist_data)
+        self.song_list = PlaylistGeneratorAlgorithms.funky_album_algorithm(self.playlist_data)
+        return self.song_list
 
 class MatchingCategoryArtist(MatchingCategory):
 
@@ -175,7 +182,8 @@ class MatchingCategoryArtist(MatchingCategory):
 
     def generate_playlist(self):
 
-        self.songs_from_album_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
+        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
+        return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist):
@@ -239,7 +247,7 @@ def menu(self):
     #username = input("Please enter your spotify username: ")
     #token = input("Copy the access token into the program: ")
     #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQB5PQ1q7d19nghFbP_z4Q-88bCYTpal7b1yRBJWetMCphE2Ikwv812if4fzqzLuRx725blJ9J2vgoZKaFtd5Nh2MEYMp8ybITXGeGyd_K0UALxGDbMFF4-rXG93dgObzaCpdTY55D6K8Id8LXRMsmsfZV3de9hp_mwgsQLFjGIjfV67uGOfjcZ4HcXut2T-2GHJbCTE5tyWXOA4uQNHhg7q86QFJmE2u2Omm_f5ZF1etVvh'
+    token = 'BQATBkkHK_lFd89zo4_jvTTeqe72UcGMjTB30oZgYVARPCGOD-rXb2f_QavULpcgeL3W5V452h0Zq8TuejCwjKGTOAThMQVbxTNpAGFpESYwU0SFM81JhaG9y2of-MU3RW7BVPc2NZIICf8KTHxLNs5v0zR4WfgDfKqMbyX1gBRKKTcIXk4SJQnOLg0XsPu69iSJgfZ0fbNLC0DwkkEL-Zs5MNri_r4eVcS-Sa_em1Em4ooT'
     username = 'velys' #Token and username are testdata
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
@@ -251,17 +259,17 @@ def menu(self):
                 playlist = None
         '''
     #The playlists added below are testdata
-    """
+    
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:2aDpdr0r4qP6YNp2227CIi'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
-    """
-    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
+    
+    '''playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3jeoIpQpRdDrPskLdcRVW0'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:0FK7E35FEHnvIGZZeN6wqG'))
-    #playlists.append(Playlist(token, username, None))
+    #playlists.append(Playlist(token, username, None))'''
 
     the_new_playlist = merge_playlists(playlists)
-    print the_new_playlist.generate_playlist
+    print the_new_playlist.generate_playlist()
 #menu(menu)
 
