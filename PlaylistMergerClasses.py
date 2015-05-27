@@ -210,7 +210,7 @@ def merge_matching_categories(*matching_categories):
 
 def merge_playlists(*playlists):
     #Create new playlist with the same username and token as the other playlists.
-    new_playlist = Playlist(playlists[0][0].token, playlists[0][0].username, None)
+    new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
 
     #Merge the playlists    
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
@@ -219,14 +219,14 @@ def merge_playlists(*playlists):
 
 def menu(self):
 
-    token = 'BQAJUzAhQOut7sIpFCMuKU1j-ZoZ6ggoxkDvLdv0ERLWy5uvkkq6r-xmS3zs-Fm-yAgoEhDJUw9A9rhl37rHfsXkn2LE6pTgCEyHrNxo0Pw4J0b0uIhJRG_63hA1c6QkJzBmq0mjTIAPEmXTo86q7UnqEZgxtLhQTsxdEdYjEW-qUJhKj8GapHFq23UQgbv0qmrpoEBBJ9n87khT8wJUsgzAQ_HlydCaBG7yI5tbYWf8HIw_LDyUHdc2dF45tUA_aDqe43zpOEuB_JBbsM7IBboqN6CjuE_2aL8CZ_wVki_u'
+    token = 'BQC3BGUSDhNxePkr_tvvvx8WmQcQk4jlsjRWX2zsrLDgiIAowO-VS7KzcU0iqRFyk9qODRlENnZ60XJ9AUWeWuWNEJ77Z_tyFUVHef8Vfc3rJahXDiKsdkuQQxO1H55imkJww9p64mFluzxO93zAQCotMnQhz-qoAhjFHfvP8sva3XY3BA2eqKHOW50AR_96DH8zzMAmEvY-HbSEoIm9m8tcZaUEvXT6mBeTV2qv_HOIhxA9TzVLdwyExnWjUCDYGwmh0ui1jXZynLTTrEkIp7UWkoPtPc46-_Jc-46EyNb8'
     username = "sanna_19"
     empty_playlist = Playlist(token, username, None)
     playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to")
     playlist2 = Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0')
     playlist3 = Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ')
 
-    merged_playlist = self.merge_playlists(empty_playlist, playlist1, playlist2, playlist3)
+    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
 
 
     mc1 = MatchingCategorySong(playlist1)
