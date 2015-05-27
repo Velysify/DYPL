@@ -52,7 +52,9 @@ class Playlist:
 
 
     def generate_playlist(self):
-        pass
+
+        for category in self.matching_categories:
+            category.generate_playlist
 
 class MatchingCategory(object):
     pass
@@ -94,7 +96,7 @@ class MatchingCategorySong(MatchingCategory):
             if not artist_song_identifier in playlist_analysis.keys() and artist_song_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['uri'])
+                item.append(track)
                 playlist_analysis[artist_song_identifier] = item
             else:
                 value = playlist_analysis.get(artist_song_identifier)
@@ -102,6 +104,14 @@ class MatchingCategorySong(MatchingCategory):
                 value[0] = new_value
 
         return playlist_analysis
+
+    def generate_playlist(self):
+
+        self.songs_from_song_list = []
+
+        for key in self.playlist_data.keys():
+            tmplist = self.playlist_data.get(key)
+            self.songs_from_song_list.append(tmplist[1])
 
 class MatchingCategoryAlbum(MatchingCategory):
 
@@ -122,7 +132,7 @@ class MatchingCategoryAlbum(MatchingCategory):
             if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['album']['name'])
+                item.append(track['album'])
                 playlist_analysis[album_identifier] = item
             else:
                 value = playlist_analysis.get(album_identifier)
@@ -130,6 +140,10 @@ class MatchingCategoryAlbum(MatchingCategory):
                 value[0] = new_value
                 
         return playlist_analysis
+
+    def generate_playlist(self):
+
+        self.songs_from_album_list = PlaylistGeneratorAlgorithms.funky_album_algorithm(self.playlist_data)
 
 class MatchingCategoryArtist(MatchingCategory):
 
@@ -150,7 +164,7 @@ class MatchingCategoryArtist(MatchingCategory):
             if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['artists'][0]['name'])
+                item.append(track['artists'])
                 playlist_analysis[artist_identifier] = item
             else:
                 value = playlist_analysis.get(artist_identifier)
@@ -158,6 +172,10 @@ class MatchingCategoryArtist(MatchingCategory):
                 value[0] = new_value
                 
         return playlist_analysis
+
+    def generate_playlist(self):
+        pass
+        #self.songs_from_album_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
     
 class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist):
@@ -242,5 +260,6 @@ def menu(self):
 
 
 #menu()
+
 #menu(menu)
 
