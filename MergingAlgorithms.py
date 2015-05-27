@@ -6,13 +6,13 @@ def mc_based_on_common_tastes(*matching_categories):
     #Returns a matching_category containing only the songs present in all of the playlists
     #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
-    for mc in matching_categories[0]:          
-        for entry in mc.playlist_data.keys():
+    print "content of matching categories: "+str(matching_categories)
 
-            if entry in merged_matching_category:
-                merged_matching_category[entry][0] += mc.playlist_data[entry][0]
-            else:
-                merged_matching_category[entry] = mc.playlist_data[entry]
+    for entry in matching_categories[0].playlist_data.keys():
+        if entry in merged_matching_category:
+            merged_matching_category[entry][0] += matching_categories[0].playlist_data[entry][0]
+        else:
+            merged_matching_category[entry] = matching_categories[0].playlist_data[entry]
 
     for entry in merged_matching_category.keys():
         if merged_matching_category[entry][0]<2:
@@ -24,10 +24,12 @@ def mc_based_on_common_tastes(*matching_categories):
 def mc_by_compromising(*matching_categories):
     merged_matching_category = {}
 
+    print "here comes the contents of matching_categories: "+ str(matching_categories)
     number_of_merging_categories = len(matching_categories)
     #calculate the total amount of songs in all of the playlists
     total_playlist_size = 0
     for mc in matching_categories:
+        print "here comes mc: "+str(mc)+"it's of the type"+str(mc.__class__)
         total_playlist_size += len(mc.playlist_data)
 
     #creates a set of entries for each matching category
@@ -74,6 +76,6 @@ def pl_supre_best_algorith_ever(new_playlist, *playlists):
         for playlist in playlists:
             print "pong"
             categories_to_be_merged.append(playlist.matching_categories[index])
-        new_playlist.matching_categories.append(PlaylistMergerClasses.merge_matching_categories(categories_to_be_merged))
+        new_playlist.matching_categories.append(PlaylistMergerClasses.merge_matching_categories(*categories_to_be_merged))
     #Return the playlist        
     return new_playlist
