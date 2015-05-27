@@ -103,6 +103,14 @@ class MatchingCategorySong(MatchingCategory):
 
         return playlist_analysis
 
+    def generate_playlist(self):
+
+        self.songs_from_song_list = []
+
+        for key in self.playlist_data.keys():
+            tmplist = self.playlist_data.get(key)
+            self.songs_from_song_list.append(tmplist[1])
+
 class MatchingCategoryAlbum(MatchingCategory):
 
     def __init__(self, playlist):
