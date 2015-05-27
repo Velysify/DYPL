@@ -62,32 +62,42 @@ class Playlist:
             
 
 class MatchingCategory(object):
-    pass
-    """
-    def __init__(self, playlist):
-        self.playlist_data = {}
-        self.playlist_data = self.analyze_playlist(playlist)
-        self.harmony_rating = 0
 
-        #playlist_data should always be implemented as a dictionary with a string as a key and a list as value.
-        #The key string represents the item of each category (genre names for a genre category, artist names for an artist category, etc.)
-        #The first value of the list should always be an inte representing the "weight" of each item
-        
+     def __init__(self, playlist, playlist_data_for_meged_mc):
 
-    #Returns an array of Spotify songs, later used by the Playlist-object to create a Spotify playlist
-    def generate_playlist(self):
-        pass
-    #Analyzes the array of songs (passed as the parameter 'playlist'), returns a dictionary with keys and weights to be stored in the playlist_data variable
-    def analyze_playlist(playlist):
-        pass
-    """
+        #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
+        #In that case, set playlist_data to the dictionary provided by the merging method
+        if (playlist_data_for_meged_mc == None and playlist != None):
+            self.playlist_data = {}
+            self.playlist_data = self.analyze_playlist(playlist)
+        elif (playlist_data_for_meged_mc != None and playlist== None):
+            self.playlist_data = playlist_data_for_meged_mc
+        else:
+            raise NameError ('Vajsing!')
+        """
+        def __init__(self, playlist):
+            self.playlist_data = {}
+            self.playlist_data = self.analyze_playlist(playlist)
+            self.harmony_rating = 0
+
+            #playlist_data should always be implemented as a dictionary with a string as a key and a list as value.
+            #The key string represents the item of each category (genre names for a genre category, artist names for an artist category, etc.)
+            #The first value of the list should always be an inte representing the "weight" of each item
+
+
+        #Returns an array of Spotify songs, later used by the Playlist-object to create a Spotify playlist
+        def generate_playlist(self):
+            pass
+        #Analyzes the array of songs (passed as the parameter 'playlist'), returns a dictionary with keys and weights to be stored in the playlist_data variable
+        def analyze_playlist(playlist):
+            pass
+        """
+
 class MatchingCategorySong(MatchingCategory):
 
-    def __init__(self, playlist):
-        self.playlist_data = {}
-        self.playlist_data = self.analyze_playlist(playlist)
+    def __init__(self, playlist, playlist_data_for_merged_mc):
 
-        #MatchingCategory.__init__(self, playlist)
+        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
 
     def analyze_playlist(self, playlist):
         #Creates the dictionary object to return
@@ -121,11 +131,9 @@ class MatchingCategorySong(MatchingCategory):
 
 class MatchingCategoryAlbum(MatchingCategory):
 
-    def __init__(self, playlist):
-        self.playlist_data = {}
-        self.playlist_data = self.analyze_playlist(playlist)
+    def __init__(self, playlist, playlist_data_for_merged_mc):
+        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
 
-        #MatchingCategory.__init__(self, playlist)
 
     def analyze_playlist(self, playlist):
         #Creates the dictionary object to return
@@ -154,11 +162,9 @@ class MatchingCategoryAlbum(MatchingCategory):
 
 class MatchingCategoryArtist(MatchingCategory):
 
-    def __init__(self, playlist):
-        self.playlist_data = {}
-        self.playlist_data = self.analyze_playlist(playlist)
+    def __init__(self, playlist, playlist_data_for_merged_mc):
+        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
 
-        #MatchingCategory.__init__(self, playlist)
 
     def analyze_playlist(self, playlist):
         #Creates the dictionary object to return
@@ -181,14 +187,19 @@ class MatchingCategoryArtist(MatchingCategory):
         return playlist_analysis
 
     def generate_playlist(self):
+<<<<<<< HEAD
 
         self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
         return self.song_list
+=======
+        pass
+        #self.songs_from_album_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
+>>>>>>> 0d92a80588ed441c46bc5c4a2cf6babe0c335084
     
 class MatchingCategoryGenre(MatchingCategory):
-    def __init__(self, playlist):
-        self.playlist_data = {}
-        self.playlist_data = self.analyze_playlist(playlist)
+    def __init__(self, playlist, playlist_data_for_merged_mc):
+        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
+
 
     def analyze_playlist(self,playlist):
         playlist_analysis = {}
@@ -227,7 +238,7 @@ def create_matching_categories(playlist):
     #Finds all Subclasses of MatchingCategory, initzialise it with the entered playlist and adds it to the list.
     categories = [cls for cls in MatchingCategory.__subclasses__()]
     for category in categories:
-        playlist.matching_categories.append(category(playlist))
+        playlist.matching_categories.append(category(playlist, None))
                 
 def merge_matching_categories(*matching_categories):
     merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
@@ -236,7 +247,7 @@ def merge_matching_categories(*matching_categories):
 
 def merge_playlists(*playlists):
     #Create new playlist with the same username and token as the other playlists.
-    new_playlist = Playlist(playlists[0][0].token, playlists[0][0].username, None)
+    new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
 
     #Merge the playlists    
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
@@ -244,6 +255,7 @@ def merge_playlists(*playlists):
 
 
 def menu(self):
+<<<<<<< HEAD
     #username = input("Please enter your spotify username: ")
     #token = input("Copy the access token into the program: ")
     #playlist = input("Enter the URI of first playlist to be merged: ")
@@ -271,5 +283,32 @@ def menu(self):
 
     the_new_playlist = merge_playlists(playlists)
     print the_new_playlist.generate_playlist()
+=======
+
+    token = 'BQC3BGUSDhNxePkr_tvvvx8WmQcQk4jlsjRWX2zsrLDgiIAowO-VS7KzcU0iqRFyk9qODRlENnZ60XJ9AUWeWuWNEJ77Z_tyFUVHef8Vfc3rJahXDiKsdkuQQxO1H55imkJww9p64mFluzxO93zAQCotMnQhz-qoAhjFHfvP8sva3XY3BA2eqKHOW50AR_96DH8zzMAmEvY-HbSEoIm9m8tcZaUEvXT6mBeTV2qv_HOIhxA9TzVLdwyExnWjUCDYGwmh0ui1jXZynLTTrEkIp7UWkoPtPc46-_Jc-46EyNb8'
+    username = "sanna_19"
+    empty_playlist = Playlist(token, username, None)
+    playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to")
+    playlist2 = Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0')
+    playlist3 = Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ')
+
+    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
+
+
+    mc1 = MatchingCategorySong(playlist1, None)
+    mc2 = MatchingCategorySong(playlist2, None)
+    mc3 = MatchingCategorySong(playlist3, None)
+
+    #print(mc1.playlist_data)
+    #print(mc2.playlist_data)
+
+    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
+
+
+
+
+#menu()
+
+>>>>>>> 0d92a80588ed441c46bc5c4a2cf6babe0c335084
 #menu(menu)
 
