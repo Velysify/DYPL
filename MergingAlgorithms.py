@@ -1,5 +1,5 @@
 import unittest
-#import PlaylistMergerClasses
+import PlaylistMergerClasses
 
 
 def mc_based_on_common_tastes(*matching_categories):
@@ -23,20 +23,51 @@ def mc_based_on_common_tastes(*matching_categories):
 
 def mc_by_compromising(*matching_categories):
     merged_matching_category = {}
-    playlist_number = 0
 
+    number_of_merging_categories = len(matching_categories)
+    #calculate the total amount of songs in all of the playlists
+    total_playlist_size = 0
+    for mc in matching_categories:
+        total_playlist_size += len(mc.playlist_data)
+
+    #creates a set of entries for each matching category
+    items_in_each_playlist = [[] for x in range(number_of_merging_categories)]
+
+    #Iterates through the matching categories, keping track (through the playlist_number variable) which matching category is the current one
+    playlist_number = 0
     for mc in matching_categories:
         for entry in mc.playlist_data.keys():
+            #If an entry is already added to the final, merged category, the weight is increased
             if entry in merged_matching_category: #obra
                 merged_matching_category[entry][0] += mc.playlist_data[entry][0]
+                items_in_each_playlist[playlist_number].append(entry)
+            #Otherwise, it's added, in either case the entry is added to the set corresponding to the current matching category
             else:
                 merged_matching_category[entry] = mc.playlist_data[entry]
+                items_in_each_playlist[playlist_number].append(entry)
+
 
         playlist_number += 1
+    #Loops through the final merged matching category, selecting one of the original matching categories for every iteration.
+    #Deletes the entry if the weight is not above 2, or the entry was not present in the original matching category that is currently selected
+    current_mc = 0
+    for entry in merged_matching_category.keys():
 
-def pl_supre_best_algorith_ever(*playlists):
+        boolean = entry in items_in_each_playlist[current_mc]
+        if merged_matching_category[entry][0]>=2 or (merged_matching_category[entry] in items_in_each_playlist[current_mc]):
+            pass
+        else:
+            del merged_matching_category[entry]
+        current_mc += 1
+        if current_mc>number_of_merging_categories-1: current_mc = 0
+
+    return merged_matching_category
+
+
+
+def pl_supre_best_algorith_ever(empty_playlist, *playlists):
     #For testing purposes, assumes all playlists have the same number of merging categories
-    merged_playlist = PlaylistMergerClasses.Playlist("lol", "lol", "lol", 2)
+    merged_playlist = empty_playlist
 
 
     unmerged_matching_categories_for_new_playlist = [[] for i in range(len(playlists[0].matching_categories))]

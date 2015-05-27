@@ -204,7 +204,7 @@ def create_matching_categories(playlist):
         playlist.matching_categories.append(category(playlist))
                 
 def merge_matching_categories(*matching_categories):
-    merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
+    merging_algorithm = MergingAlgorithms.mc_by_compromising
 
     return merging_algorithm(*matching_categories)
 
@@ -216,30 +216,28 @@ def merge_playlists(*playlists):
 
 def menu(self):
 
-
-    token = 'BQCS8QZ1tVR1Kk-sFt6UmHHDq-q2HJ6YMG1NKzzLO5G20wkES1PG-IgREEcrv4J4cTqTLyy6KognA0Qd4BUAMgAQORR7v5cFh6hm8qcJja79j6y1sOvUBC7ZNtquKU1mJz9ZMUMJ3LhBvpotVgpdmCxyGOD2t5Xl4VLjKFLnUIGa-nSFOWSVPOzI8P8foq5EJO12kSsxBjQaDApXhdSdL8quzMSIY9x4Q8ujTXH9qVV1vysiSNYCfrmiBSoQBLPpeXh7yUClJhD1OBEvEFcYjF2hm1PH93reheDx0OYpqlWa'
+    token = 'BQAJUzAhQOut7sIpFCMuKU1j-ZoZ6ggoxkDvLdv0ERLWy5uvkkq6r-xmS3zs-Fm-yAgoEhDJUw9A9rhl37rHfsXkn2LE6pTgCEyHrNxo0Pw4J0b0uIhJRG_63hA1c6QkJzBmq0mjTIAPEmXTo86q7UnqEZgxtLhQTsxdEdYjEW-qUJhKj8GapHFq23UQgbv0qmrpoEBBJ9n87khT8wJUsgzAQ_HlydCaBG7yI5tbYWf8HIw_LDyUHdc2dF45tUA_aDqe43zpOEuB_JBbsM7IBboqN6CjuE_2aL8CZ_wVki_u'
     username = "sanna_19"
-    playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to", 1)
-    playlist2 = Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0', 1)
-    playlist3 = Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ', 1)
+    empty_playlist = Playlist(token, username, None)
+    playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to")
+    playlist2 = Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0')
+    playlist3 = Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ')
 
-    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
+    merged_playlist = self.merge_playlists(empty_playlist, playlist1, playlist2, playlist3)
 
 
     mc1 = MatchingCategorySong(playlist1)
     mc2 = MatchingCategorySong(playlist2)
     mc3 = MatchingCategorySong(playlist3)
 
-
     #print(mc1.playlist_data)
     #print(mc2.playlist_data)
-
 
     print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
 
 
 
 
-menu()
+#menu()
 #menu(menu)
 
