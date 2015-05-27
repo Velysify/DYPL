@@ -15,8 +15,6 @@ class Playlist:
             self.playlist = playlist
             self.array_of_songs_in_playlist = []
             self.matching_categories = []
-
-
             self.fill_up_array_of_songs_in_playlist(self.playlist)
 
             create_matching_categories(self)
@@ -41,7 +39,7 @@ class Playlist:
         else:
             print "Can't get token for",
 
-    def generate_matching_categories(self):
+    """def generate_matching_categories(self):
         #hardkodat, se till att det gar att konfigurera @ runtime
         print "generating matching categories"
 
@@ -50,7 +48,7 @@ class Playlist:
 
         self.matching_categories.append(new_matching_category_song)
         self.matching_categories.append(new_matching_category_artist)
-
+    """
 
 
     def generate_playlist(self):
@@ -91,7 +89,7 @@ class MatchingCategorySong(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            artist_song_identifier = str(track['name'])+" - "+ str(track['artists'][0]['name'])
+            artist_song_identifier = ((track['name'])+" - "+ (track['artists'][0]['name'])).encode('utf-8')
 
             if not artist_song_identifier in playlist_analysis.keys() and artist_song_identifier not in self.playlist_data.keys():
                 item = []
@@ -120,7 +118,7 @@ class MatchingCategoryAlbum(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            album_identifier = str(track['album']['name'])
+            album_identifier = (track['album']['name']).encode('utf-8')
             if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -170,8 +168,9 @@ class MatchingCategoryGenre(MatchingCategory):
         playlist_analysis = {}
         for track in playlist.array_of_songs_in_playlist:
 
-            #To catch and wait for HTTP: 429 
+            #Try until HTTP Error 429: Too many requests is raises.
             try:
+                #For each line in the href: look for genres and clean them to make searchable strings.
                 href = track['artists'][0]['href']
                 for line in urllib2.urlopen(href):
                     genre = re.search('\"\s*genres\" \: .*', line)
@@ -189,6 +188,7 @@ class MatchingCategoryGenre(MatchingCategory):
                                     value = playlist_analysis.get(genre)
                                     new_value = value[0] +1
                                     value[0] = new_value
+            #When Error 429 is raised read the servers reply and wait for that many seconds before continuing.                        
             except urllib2.HTTPError, err:
                 if err.code == 429:
                     time.sleep(float(err.hdrs.get('Retry-After')))         
@@ -199,7 +199,7 @@ class MatchingCategoryGenre(MatchingCategory):
 
 def create_matching_categories(playlist):
     #Finds all Subclasses of MatchingCategory, initzialise it with the entered playlist and adds it to the list.
-    categories = [cls for cls in eval('MatchingCategory').__subclasses__()]
+    categories = [cls for cls in MatchingCategory.__subclasses__()]
     for category in categories:
         playlist.matching_categories.append(category(playlist))
                 
@@ -209,9 +209,12 @@ def merge_matching_categories(*matching_categories):
     return merging_algorithm(*matching_categories)
 
 def merge_playlists(*playlists):
-    merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
+    #Create new playlist with the same username and token as the other playlists.
+    new_playlist = Playlist(playlists[0][0].token, playlists[0][0].username, None)
 
-    return merging_algorithm(*playlists)
+    #Merge the playlists    
+    merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
+    return merging_algorithm(new_playlist, *playlists)
 
 
 def menu(self):

@@ -6,7 +6,7 @@ def mc_based_on_common_tastes(*matching_categories):
     #Returns a matching_category containing only the songs present in all of the playlists
     #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
-    for mc in matching_categories:
+    for mc in matching_categories[0]:          
         for entry in mc.playlist_data.keys():
 
             if entry in merged_matching_category:
@@ -65,26 +65,13 @@ def mc_by_compromising(*matching_categories):
 
 
 
-def pl_supre_best_algorith_ever(empty_playlist, *playlists):
-    #For testing purposes, assumes all playlists have the same number of merging categories
-    merged_playlist = empty_playlist
 
-
-    unmerged_matching_categories_for_new_playlist = [[] for i in range(len(playlists[0].matching_categories))]
-    counter = 0
-    #for each of the playlists passed as argument...
-    for matching_category in playlists[0].matching_categories:
-        for list in playlists:
-            unmerged_matching_categories_for_new_playlist[counter].append(list.matching_categories[counter])
-        counter += 1 #tror jag...
-
-    merged_matching_categories_for_new_playlist = []
-
-    counter = 0
-    for entry in unmerged_matching_categories_for_new_playlist:
-        merged_matching_categories_for_new_playlist.append(PlaylistMergerClasses.merge_matching_categories(*entry))
-        counter += 1
-
-    merged_playlist.matching_categories = merged_matching_categories_for_new_playlist
-
-    return merged_playlist
+def pl_supre_best_algorith_ever(new_playlist, *playlists):
+    #For each matching category. Itterate through all the playlists and the categories.
+    for index in range(0,len(playlists[0][0].matching_categories)):
+            categories_to_be_merged =[]
+            for playlist in playlists[0]:
+                categories_to_be_merged.append(playlist.matching_categories[index])
+            new_playlist.matching_categories.append(PlaylistMergerClasses.merge_matching_categories(categories_to_be_merged))
+    #Return the playlist        
+    return new_playlist
