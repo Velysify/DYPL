@@ -78,7 +78,7 @@ class MatchingCategorySong(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            artist_song_identifier = str(track['name'])+" - "+ str(track['artists'][0]['name'])
+            artist_song_identifier = ((track['name'])+" - "+ (track['artists'][0]['name'])).encode('utf-8')
             if not artist_song_identifier in playlist_analysis.keys() and artist_song_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -106,7 +106,7 @@ class MatchingCategoryAlbum(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            album_identifier = str(track['album']['name'])
+            album_identifier = (track['album']['name']).encode('utf-8')
             if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -194,6 +194,13 @@ def merge_matching_categories(*matching_categories):
     return merging_algorithm(*matching_categories)
 
 def merge_playlists(*playlists):
+    new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
+    for index in playlists[0].matching_categories.length:
+        categories_to_be_matched = []
+        for playlist in playlists:
+            categories_to_be_matched.append(playlist.matching_categories(index))
+        new_playlist.matching_categories.append(merge_matching_categories(categories_to_be_matched))
+        
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
 
     return merging_algorithm(*playlists)
@@ -205,8 +212,8 @@ def menu():
     #username = input("Please enter your spotify username: ")
     #token = input("Copy the access token into the program: ")
     #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQAw5Cc88kGLtAzletv1qT3xvF2NGqfJE_ud2tTtab9azV5fVRnHCXB99IMczyfhkwJOFCsksOAaPjZCy8PomOAnwHyWNRddkcmsQppck4pLK0bv27_0DXNMZBY1cTiIqpxttUelPXKzNMzLRIXPEPO-_81wB0QwF37SM6axuBDak55RMqmmeowXp56zYwfJaXvRhHyKdZkMoAUO4g7dC2LQNRdiu2eSy23Sh2lta_Cfmgvdo_1Pn0gguVev9eIBw28xM7dYR0gSR2g5coEby-oIftflGKDJFfPQHMc02fhd'
-    username = 'sanna_19' #Token and username are test data
+    token = 'BQAhTiT4WIlb1M5aG3ALpzsKgR5cuUULs-TIpvbDrwYJjkUyP5s5g8QCLb9zAmG9JhW38jU9enIcHWbu61t-8w6xG0Wg0Re90Dhxd61fSdHRiEvYSeG5axCuTTAB0qU9NqWN_ozsA8UbfhM_TWrp9rLugmhk-OhrJfJDt_4WCLpzOSZuF91zvHIDkDVANna_wHZBDqdlTWJX8bPxchH_ezLWjUzwzAG9Uyw4dEtllGBMpeIf'
+    username = 'velys' #Token and username are test data
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
     playlists = []
@@ -217,9 +224,9 @@ def menu():
                 playlist = None
         '''
     #The playlists added below are testdata
-    playlists.append(Playlist(token, username, '3BVqFufvKtRenYZjG9y3to'))
-    playlists.append(Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0'))
-    playlists.append(Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ'))
+    playlists.append(Playlist(token, username, '7n0np8taZhlvE0iNYjC9Gu'))
+    playlists.append(Playlist(token, username, '3jeoIpQpRdDrPskLdcRVW0'))
+    #playlists.append(Playlist(token, username, '0FK7E35FEHnvIGZZeN6wqG'))
     #playlists.append(Playlist(token, username, None))
     merging_list = []
         
