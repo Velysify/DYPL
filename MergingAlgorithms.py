@@ -7,6 +7,9 @@ def mc_based_on_common_tastes(*matching_categories):
     #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
 
+    
+    #print "content of matching categories: "+str(matching_categories)
+
     for entry in matching_categories[0].playlist_data.keys():
         if entry in merged_matching_category:
             merged_matching_category[entry][0] += matching_categories[0].playlist_data[entry][0]
@@ -18,6 +21,7 @@ def mc_based_on_common_tastes(*matching_categories):
             del merged_matching_category[entry]
 
     return merged_matching_category
+    
 
 
 def mc_by_compromising(*matching_categories):
@@ -61,8 +65,6 @@ def mc_by_compromising(*matching_categories):
         if current_mc>number_of_merging_categories-1: current_mc = 0
 
     return matching_categories[0].__class__(None, merged_matching_category)
-
-
 
 
 def pl_supre_best_algorith_ever(new_playlist, *playlists):
