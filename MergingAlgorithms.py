@@ -36,9 +36,9 @@ def mc_by_compromising(*matching_categories):
 
 def pl_supre_best_algorith_ever(new_playlist, *playlists):
     #For each matching category. Itterate through all the playlists and the categories.
-    for index in range(0,len(playlists[0][0].matching_categories)):
+    for index in range(0,len(playlists[0].matching_categories)):
             categories_to_be_merged =[]
-            for playlist in playlists[0]:
+            for playlist in playlists:
                 categories_to_be_merged.append(playlist.matching_categories[index])
             new_playlist.matching_categories.append(PlaylistMergerClasses.merge_matching_categories(categories_to_be_merged))
     #Return the playlist        
