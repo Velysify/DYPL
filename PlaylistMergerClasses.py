@@ -16,6 +16,7 @@ class Playlist:
             self.array_of_songs_in_playlist = []
             self.matching_categories = []
 
+
             self.fill_up_array_of_songs_in_playlist(self.playlist)
 
             create_matching_categories(self)
@@ -38,7 +39,19 @@ class Playlist:
                 self.array_of_songs_in_playlist.append(i)
 
         else:
-            print "Can't get token for", username
+            print "Can't get token for",
+
+    def generate_matching_categories(self):
+        #hardkodat, se till att det gar att konfigurera @ runtime
+        print "generating matching categories"
+
+        new_matching_category_song = MatchingCategorySong(self)
+        new_matching_category_artist = MatchingCategoryArtist(self)
+
+        self.matching_categories.append(new_matching_category_song)
+        self.matching_categories.append(new_matching_category_artist)
+
+
 
     def generate_playlist(self):
         pass
@@ -48,7 +61,7 @@ class MatchingCategory(object):
     """
     def __init__(self, playlist):
         self.playlist_data = {}
-        self.playlist_data = analyze_playlist(playlist)
+        self.playlist_data = self.analyze_playlist(playlist)
         self.harmony_rating = 0
 
         #playlist_data should always be implemented as a dictionary with a string as a key and a list as value.
@@ -79,6 +92,7 @@ class MatchingCategorySong(MatchingCategory):
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
             artist_song_identifier = ((track['name'])+" - "+ (track['artists'][0]['name'])).encode('utf-8')
+
             if not artist_song_identifier in playlist_analysis.keys() and artist_song_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -155,6 +169,7 @@ class MatchingCategoryGenre(MatchingCategory):
     def analyze_playlist(self,playlist):
         playlist_analysis = {}
         for track in playlist.array_of_songs_in_playlist:
+
             #To catch and wait for HTTP: 429 
             try:
                 href = track['artists'][0]['href']
@@ -206,34 +221,31 @@ def merge_playlists(*playlists):
     return merging_algorithm(*playlists)
 
 
-#def menu(self):
-    
-def menu():
-    #username = input("Please enter your spotify username: ")
-    #token = input("Copy the access token into the program: ")
-    #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQAhTiT4WIlb1M5aG3ALpzsKgR5cuUULs-TIpvbDrwYJjkUyP5s5g8QCLb9zAmG9JhW38jU9enIcHWbu61t-8w6xG0Wg0Re90Dhxd61fSdHRiEvYSeG5axCuTTAB0qU9NqWN_ozsA8UbfhM_TWrp9rLugmhk-OhrJfJDt_4WCLpzOSZuF91zvHIDkDVANna_wHZBDqdlTWJX8bPxchH_ezLWjUzwzAG9Uyw4dEtllGBMpeIf'
-    username = 'velys' #Token and username are test data
-    #option = input("How do you want to merge the playlists?"
-    spotify = spotipy.Spotify(auth=token)
-    playlists = []
-    '''while playlist:
-            playlists.append(Playlist.token, username, playlist)
-            playlist = input("Enter the next URI")
-            if playlist = ""
-                playlist = None
-        '''
-    #The playlists added below are testdata
-    playlists.append(Playlist(token, username, '7n0np8taZhlvE0iNYjC9Gu'))
-    playlists.append(Playlist(token, username, '3jeoIpQpRdDrPskLdcRVW0'))
-    #playlists.append(Playlist(token, username, '0FK7E35FEHnvIGZZeN6wqG'))
-    #playlists.append(Playlist(token, username, None))
-    merging_list = []
-        
-    for playlist in playlists:
-        merging_list.extend(playlist.matching_categories)
+def menu(self):
 
-    print merge_matching_categories(*merging_list)
+
+    token = 'BQCS8QZ1tVR1Kk-sFt6UmHHDq-q2HJ6YMG1NKzzLO5G20wkES1PG-IgREEcrv4J4cTqTLyy6KognA0Qd4BUAMgAQORR7v5cFh6hm8qcJja79j6y1sOvUBC7ZNtquKU1mJz9ZMUMJ3LhBvpotVgpdmCxyGOD2t5Xl4VLjKFLnUIGa-nSFOWSVPOzI8P8foq5EJO12kSsxBjQaDApXhdSdL8quzMSIY9x4Q8ujTXH9qVV1vysiSNYCfrmiBSoQBLPpeXh7yUClJhD1OBEvEFcYjF2hm1PH93reheDx0OYpqlWa'
+    username = "sanna_19"
+    playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to", 1)
+    playlist2 = Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0', 1)
+    playlist3 = Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ', 1)
+
+    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
+
+
+    mc1 = MatchingCategorySong(playlist1)
+    mc2 = MatchingCategorySong(playlist2)
+    mc3 = MatchingCategorySong(playlist3)
+
+
+    #print(mc1.playlist_data)
+    #print(mc2.playlist_data)
+
+
+    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
+
+
+
 
 menu()
 #menu(menu)
