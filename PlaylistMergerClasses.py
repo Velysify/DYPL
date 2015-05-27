@@ -58,7 +58,7 @@ class Playlist:
 
 class MatchingCategory(object):
 
-     def __init__(self, playlist, playlist_data_for_meged_mc):
+    def __init__(self, playlist, playlist_data_for_meged_mc):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
@@ -87,6 +87,14 @@ class MatchingCategory(object):
         def analyze_playlist(playlist):
             pass
         """
+
+    def __str__(self):
+        tjolahopp = ""
+
+        for item_name, weight in self.playlist_data.iteritems():
+            tjolahopp = tjolahopp+(item_name)+" weight: "+str(weight[0])+"\n"
+
+        return tjolahopp
 
 class MatchingCategorySong(MatchingCategory):
 
@@ -228,7 +236,7 @@ def create_matching_categories(playlist):
         playlist.matching_categories.append(category(playlist, None))
                 
 def merge_matching_categories(*matching_categories):
-    merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
+    merging_algorithm = MergingAlgorithms.mc_by_compromising
 
     return merging_algorithm(*matching_categories)
 
@@ -243,7 +251,7 @@ def merge_playlists(*playlists):
 
 def menu(self):
 
-    token = 'BQC3BGUSDhNxePkr_tvvvx8WmQcQk4jlsjRWX2zsrLDgiIAowO-VS7KzcU0iqRFyk9qODRlENnZ60XJ9AUWeWuWNEJ77Z_tyFUVHef8Vfc3rJahXDiKsdkuQQxO1H55imkJww9p64mFluzxO93zAQCotMnQhz-qoAhjFHfvP8sva3XY3BA2eqKHOW50AR_96DH8zzMAmEvY-HbSEoIm9m8tcZaUEvXT6mBeTV2qv_HOIhxA9TzVLdwyExnWjUCDYGwmh0ui1jXZynLTTrEkIp7UWkoPtPc46-_Jc-46EyNb8'
+    token = 'BQDSTSMnc1HoKt_D8JHkFc_A7RzA2Yimz4JRUuzsP7CewC4scPpsbGJnZVZV0dqreM6VfZAeLdRJ3Ym10nPXtjPx7LrZg-xCfx4Be6sXLPjIXnXM_0ilAQXoW7smuH4bPXZpBnPCkbO4pYuXxF1NTltloEsYpCKzPqrR05u6DH2pK2sL9rT8A9Krj2xTMFPgQ6OSF0RdcxO21VOhbwf2QnfwBTTL6Hej47kDeDRlKFf-uoyFOanP9W44meG2nydln9kT_mwQGN7NuuqKvPl-zulWw729mIOGIF3emMAJHNw2'
     username = "sanna_19"
     empty_playlist = Playlist(token, username, None)
     playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to")
@@ -260,7 +268,9 @@ def menu(self):
     #print(mc1.playlist_data)
     #print(mc2.playlist_data)
 
-    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
+    print "here comes the merged playlist: "
+    for mc in merged_playlist.matching_categories:
+        print mc
 
 
 
