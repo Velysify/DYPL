@@ -1,5 +1,5 @@
 import unittest
-#import PlaylistMergerClasses
+import PlaylistMergerClasses
 
 
 def mc_based_on_common_tastes(*matching_categories):
@@ -7,7 +7,7 @@ def mc_based_on_common_tastes(*matching_categories):
     #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
     
-    print "content of matching categories: "+str(matching_categories)
+    #print "content of matching categories: "+str(matching_categories)
 
 
     for entry in matching_categories[0].playlist_data.keys():
@@ -72,10 +72,8 @@ def mc_by_compromising(*matching_categories):
 def pl_supre_best_algorith_ever(new_playlist, *playlists):
     #For each matching category. Itterate through all the playlists and the categories.
     for index in range(0,len(playlists[0].matching_categories)):
-        print "ping"
         categories_to_be_merged =[]
         for playlist in playlists:
-            print "pong"
             categories_to_be_merged.append(playlist.matching_categories[index])
         new_playlist.matching_categories.append(PlaylistMergerClasses.merge_matching_categories(*categories_to_be_merged))
     #Return the playlist        
