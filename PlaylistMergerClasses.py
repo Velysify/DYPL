@@ -58,9 +58,14 @@ class Playlist:
         main_krover = []
 
         for category in self.matching_categories:
-            print category
-            #krover = category.generate_playlist()
-            #main_krover.extend(krover)
+            print '---------------'
+            #print category
+            krover = category.generate_playlist()
+            main_krover.extend(krover)
+        print 'THIS IS KROVER!'
+        for i in range (len(main_krover)):
+            print main_krover[i]['name']
+        #print main_krover
         return main_krover
 
     def create_playlist(self):
@@ -210,7 +215,8 @@ class MatchingCategoryArtist(MatchingCategory):
         return playlist_analysis
 
     def generate_playlist(self):
-        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
+
+        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(self.playlist_data)
         return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
@@ -249,6 +255,11 @@ class MatchingCategoryGenre(MatchingCategory):
                     raise
                                 
         return playlist_analysis
+
+    def generate_playlist(self):
+
+        self.song_list = PlaylistGeneratorAlgorithms.funky_genre_algorithm(self.playlist_data)
+        return self.song_list
 
 def create_matching_categories(playlist):
     #Finds all Subclasses of MatchingCategory, initzialise it with the entered playlist and adds it to the list.
@@ -302,4 +313,23 @@ def menu(self):
     p1.create_playlist()
     
 #menu(menu)
+
+    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
+
+
+    mc1 = MatchingCategorySong(playlist1, None)
+    mc2 = MatchingCategorySong(playlist2, None)
+    mc3 = MatchingCategorySong(playlist3, None)
+
+    #print(mc1.playlist_data)
+    #print(mc2.playlist_data)
+
+    #print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
+
+    print 'hej hopp'
+    merged_playlist.generate_playlist()
+
+
+#menu()
+
 
