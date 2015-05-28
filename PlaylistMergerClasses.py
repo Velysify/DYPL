@@ -56,9 +56,14 @@ class Playlist:
         main_krover = []
 
         for category in self.matching_categories:
-            print category
-            #krover = category.generate_playlist()
-            #main_krover.extend(krover)
+            print '---------------'
+            #print category
+            krover = category.generate_playlist()
+            main_krover.extend(krover)
+        print 'THIS IS KROVER!'
+        for i in range (len(main_krover)):
+            print main_krover[i]['name']
+        #print main_krover
         return main_krover
             
 
@@ -197,7 +202,7 @@ class MatchingCategoryArtist(MatchingCategory):
 
     def generate_playlist(self):
 
-        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
+        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(self.playlist_data)
         return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
@@ -238,6 +243,11 @@ class MatchingCategoryGenre(MatchingCategory):
                                 
         return playlist_analysis
 
+    def generate_playlist(self):
+
+        self.song_list = PlaylistGeneratorAlgorithms.funky_genre_algorithm(self.playlist_data)
+        return self.song_list
+
 def create_matching_categories(playlist):
     #Finds all Subclasses of MatchingCategory, initzialise it with the entered playlist and adds it to the list.
     categories = [cls for cls in MatchingCategory.__subclasses__()]
@@ -259,13 +269,9 @@ def merge_playlists(*playlists):
 
 
 def menu(self):
-<<<<<<< HEAD
-
-    token = 'BQDSTSMnc1HoKt_D8JHkFc_A7RzA2Yimz4JRUuzsP7CewC4scPpsbGJnZVZV0dqreM6VfZAeLdRJ3Ym10nPXtjPx7LrZg-xCfx4Be6sXLPjIXnXM_0ilAQXoW7smuH4bPXZpBnPCkbO4pYuXxF1NTltloEsYpCKzPqrR05u6DH2pK2sL9rT8A9Krj2xTMFPgQ6OSF0RdcxO21VOhbwf2QnfwBTTL6Hej47kDeDRlKFf-uoyFOanP9W44meG2nydln9kT_mwQGN7NuuqKvPl-zulWw729mIOGIF3emMAJHNw2'
-=======
     
-    token = 'BQAeXzaZkeOREkuIUzlK2ttdL9Mv_eBf2By424bHoERnJlSwD1UdJ_ZitB7Z-U7O0mN5pTCPsRS62p3O14RNeeiGceJhQPYSh6JUanftlNgv37yN_9sHyyb7rA8cyQHtYSwKo3CSuUruMiWbEQN6JtTNNbazcnrhFcxA_HIKkhaoB_JqI8aQ7j6CbxkW5pS9KL1QBay59xH-BygY_ph26YCu4eA0xO_qd8HwSi69AWp8tjKeSIhj9cQDIyicX55hvT8DHBlAzT-AWvHaiiavRHEVdqeBP7Qi0ATyKNRw8GVl'
->>>>>>> 48c270d8283cafc831af7b88204f0f1800bae27c
+    token = 'BQDXwXc4MlFquuQ_LglDFRNBq4i7tz30AmdwgDTQj0w2ikdu3AER-MfCeiHIk9YWer5cm2ouBBpA0QqATg4k1OzLvh6J-irxRqpoDsFzhn6ta51Cra123xA_1bbS-YRVpp8H9V31Yx_wvHUvtiWH0hr_mkwQoS4F_X2UZkWiZ9H52QBHn16Hy1MKRuHSO4QdqctBnweYfUx5dHXG8otKGXSqIFSmr5AOLZ8ztr1FbLLHWBJVVSEzeLAbPfvBGC49EPC8JByp4VwGPfw-Y55VlTHxYPNT65gTpr88YaBbBVsR'
+
     username = "sanna_19"
     empty_playlist = Playlist(token, username, None)
     playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to")
@@ -282,17 +288,10 @@ def menu(self):
     #print(mc1.playlist_data)
     #print(mc2.playlist_data)
 
-<<<<<<< HEAD
-    print "here comes the merged playlist: "
-    for mc in merged_playlist.matching_categories:
-        print mc
-=======
     #print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
 
-    print 'hej hopp', merged_playlist.generate_playlist()
->>>>>>> 48c270d8283cafc831af7b88204f0f1800bae27c
-
-
+    print 'hej hopp'
+    merged_playlist.generate_playlist()
 
 
 #menu()
