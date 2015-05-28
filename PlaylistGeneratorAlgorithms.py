@@ -35,4 +35,16 @@ def funky_artist_algorithm(playlist_data):
             songs_to_return.append(spotify.album_tracks(key['id'])['items'])
 
     return songs_to_return
+
+def funky_genre_algorithm(playlist_data):
+
+    songs_to_return = []
+
+    for key in self.playlist_data.keys():
+        tmplist = self.playlist_data.get(key)
+        weight_of_genre = tmplist[0]
+        
+
+    
+    
             
