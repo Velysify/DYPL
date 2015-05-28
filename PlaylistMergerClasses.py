@@ -58,14 +58,15 @@ class Playlist:
         main_krover = []
 
         for category in self.matching_categories:
-            krover = category.generate_playlist()
-            main_krover.extend(krover)
+            print category
+            #krover = category.generate_playlist()
+            #main_krover.extend(krover)
         return main_krover
             
 
 class MatchingCategory(object):
 
-     def __init__(self, playlist, playlist_data_for_meged_mc):
+    def __init__(self, playlist, playlist_data_for_meged_mc):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
@@ -94,6 +95,14 @@ class MatchingCategory(object):
         def analyze_playlist(playlist):
             pass
         """
+
+    def __str__(self):
+        tjolahopp = ""
+
+        for item_name, weight in self.playlist_data.iteritems():
+            tjolahopp = tjolahopp+(item_name)+" weight: "+str(weight[0])+"\n"
+
+        return tjolahopp
 
 class MatchingCategorySong(MatchingCategory):
 
@@ -191,8 +200,6 @@ class MatchingCategoryArtist(MatchingCategory):
     def generate_playlist(self):
         self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
         return self.song_list
-        pass
-        #self.songs_from_album_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
     
 class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist, playlist_data_for_merged_mc):
@@ -240,7 +247,7 @@ def create_matching_categories(playlist):
                 
 def merge_matching_categories(new_playlist, *matching_categories):
     #Set the alogritm to be used
-    merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
+    merging_algorithm = MergingAlgorithms.mc_by_compromising
     #For each Matching Category subclass
     categories = [cls for cls in MatchingCategory.__subclasses__()]
     for category in categories:
