@@ -66,15 +66,15 @@ class Playlist:
 
 class MatchingCategory(object):
 
-    def __init__(self, playlist, playlist_data_for_meged_mc):
+    def __init__(self, playlist, playlist_data_for_merged_mc):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
-        if (playlist_data_for_meged_mc == None and playlist != None):
+        if (playlist_data_for_merged_mc == None and playlist != None):
             self.playlist_data = {}
             self.playlist_data = self.analyze_playlist(playlist)
-        elif (playlist_data_for_meged_mc != None and playlist== None):
-            self.playlist_data = playlist_data_for_meged_mc
+        elif (playlist_data_for_merged_mc != None and playlist== None):
+            self.playlist_data = playlist_data_for_merged_mc
         else:
             raise NameError ('Vajsing!')
         """
@@ -245,23 +245,12 @@ def create_matching_categories(playlist):
     for category in categories:
         playlist.matching_categories.append(category(playlist, None))
                 
-def merge_matching_categories(new_playlist, *matching_categories):
+def merge_matching_categories(*matching_categories):
     #Set the alogritm to be used
     merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
-    #For each Matching Category subclass
-    categories = [cls for cls in MatchingCategory.__subclasses__()]
-    """for category in categories:
-        merge_categories = []
-        #For all the matching categories of the same subclass
-        #Run the algoritmh
-        for mc in matching_categories:
-            if isinstance(mc, category):
-                merge_categories.append(mc)
-        print merge_categories
-        if merge_categories:"""
-    new_playlist.matching_categories.append(merging_algorithm(new_playlist, *categories))
-    #return merging_algorithm(new_playlist, *matching_categories)
-
+    
+    return merging_algorithm(*matching_categories)
+    
 def merge_playlists(*playlists):
     #Create new playlist with the same username and token as the other playlists.
     new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
@@ -298,6 +287,6 @@ def menu(self):
     #playlists.append(Playlist(token, username, None))'''
     ls = merge_playlists(*playlists).matching_categories
     for x in ls:
-        print x.playlist_data
+        print x
 #menu(menu)
 
