@@ -58,14 +58,10 @@ class Playlist:
         main_krover = []
 
         for category in self.matching_categories:
-            print '---------------'
-            #print category
             krover = category.generate_playlist()
             main_krover.extend(krover)
-        print 'THIS IS KROVER!'
         for i in range (len(main_krover)):
             print main_krover[i]['name']
-        #print main_krover
         return main_krover
             
 
@@ -127,7 +123,7 @@ class MatchingCategorySong(MatchingCategory):
             if not artist_song_identifier in playlist_analysis.keys() and artist_song_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['uri'])
+                item.append(track)
                 playlist_analysis[artist_song_identifier] = item
             else:
                 value = playlist_analysis.get(artist_song_identifier)
@@ -162,7 +158,7 @@ class MatchingCategoryAlbum(MatchingCategory):
             if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['album']['name'])
+                item.append(track['album'])
                 playlist_analysis[album_identifier] = item
             else:
                 value = playlist_analysis.get(album_identifier)
@@ -193,7 +189,7 @@ class MatchingCategoryArtist(MatchingCategory):
             if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['artists'][0]['name'])
+                item.append(track['artists'])
                 playlist_analysis[artist_identifier] = item
             else:
                 value = playlist_analysis.get(artist_identifier)
@@ -272,8 +268,8 @@ def merge_playlists(*playlists):
 
 
 def menu(self):
-    
-    token = 'BQDXwXc4MlFquuQ_LglDFRNBq4i7tz30AmdwgDTQj0w2ikdu3AER-MfCeiHIk9YWer5cm2ouBBpA0QqATg4k1OzLvh6J-irxRqpoDsFzhn6ta51Cra123xA_1bbS-YRVpp8H9V31Yx_wvHUvtiWH0hr_mkwQoS4F_X2UZkWiZ9H52QBHn16Hy1MKRuHSO4QdqctBnweYfUx5dHXG8otKGXSqIFSmr5AOLZ8ztr1FbLLHWBJVVSEzeLAbPfvBGC49EPC8JByp4VwGPfw-Y55VlTHxYPNT65gTpr88YaBbBVsR'
+
+    token = 'BQCRlWQ6mN6cG2IzXx-oLWaU87yAygrS-QXwgczS2chVzWar8axFg7WHzfOGPztWo6ChoOXeQ2nZHI0BhyCZljb-5uPy0KOp5OlvoVFmOfu0ajycjMKxQjhe_uf6jswlVcee5I-bvPkQY86ZEF_d5uCzTmigWqP1NFHiJS2Md-wIO2F8u3eKgpk2CwVkl7k38LzqEaKXKr3VZ98D4onJQk31hkXl-0HSNTc_7jXwdMI9gjnRwG-3FV8V_U6Lo5EtZFzLlqOnp6XtGNV4T8Vr-jmnDWNADXhyKyUjGKoSnzXp'
 
     username = "sanna_19"
     empty_playlist = Playlist(token, username, None)

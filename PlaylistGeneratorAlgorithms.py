@@ -33,13 +33,10 @@ def funky_artist_algorithm(playlist_data):
     for key in playlist_data.keys():
         tmplist = playlist_data.get(key)
         weight_of_artist = tmplist[0]
-        paging_object = spotify.artist_albums(tmplist[1][0]['uri'], limit = weight_of_artist)
-        albums_of_artist = paging_object['items']
-        for i in range(len(albums_of_artist)):
-            songs_in_album = spotify.album_tracks(albums_of_artist[i]['id'])['items']
-            for x in range(0, 1):
-                #fix range, with weight somehow
-                songs_to_return.append(songs_in_album[x])
+
+        top_track_catalog = spotify.artist_top_tracks(tmplist[1][0]['id'])
+
+        songs_to_return.append(top_track_catalog['tracks'])
 
     return songs_to_return
 
