@@ -7,23 +7,17 @@ def mc_based_on_common_tastes(*matching_categories):
     #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
     
-    #print "content of matching categories: "+str(matching_categories)
     for mc in matching_categories:
         for entry in mc.playlist_data.keys():
             if entry in merged_matching_category:
                 merged_matching_category[entry][0] += mc.playlist_data[entry][0]
             else:
                 merged_matching_category[entry] = mc.playlist_data[entry]
-    #print merged_matching_category
     for entry in merged_matching_category.keys():
         if merged_matching_category[entry][0]<2:
             del merged_matching_category[entry]
     #Create a matching category of the same type and return it.
-    new_mc = matching_categories[0].__class__(None, merged_matching_category)
-    return new_mc
-    #new_playlist.matching_categories.append(mc)
-    
-        
+    return matching_categories[0].__class__(None, merged_matching_category)      
 
 def mc_by_compromising(*matching_categories):
     merged_matching_category = {}

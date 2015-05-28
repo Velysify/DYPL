@@ -38,7 +38,7 @@ class Playlist:
                 self.array_of_songs_in_playlist.append(i)
 
         else:
-            print "Can't get token for",
+            print "Can't get token for" + self.username
 
     """def generate_matching_categories(self):
         #hardkodat, se till att det gar att konfigurera @ runtime
@@ -63,6 +63,18 @@ class Playlist:
         for i in range (len(main_krover)):
             print main_krover[i]['name']
         return main_krover
+
+    def create_playlist(self):
+        song_list = []
+        for i in range (len(self.array_of_songs_in_playlist)):
+            song_id = self.array_of_songs_in_playlist[i]['id']
+            song_list.append(song_id)
+        if self.token:
+            sp = spotipy.Spotify(auth=self.token)
+            playlist = sp.user_playlist_create(self.username,"Merged Playlist!")
+            sp.user_playlist_add_tracks(self.username, playlist['id'],song_list)
+        else:
+            print "Can't get token for" + self.username
             
 
 class MatchingCategory(object):
@@ -206,8 +218,7 @@ class MatchingCategoryArtist(MatchingCategory):
 class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist, playlist_data_for_merged_mc):
         MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
-
-
+    #This method have extremly long runtime. 
     def analyze_playlist(self,playlist):
         playlist_analysis = {}
         for track in playlist.array_of_songs_in_playlist:
