@@ -24,6 +24,7 @@ class Playlist:
             self.token = token
             self.username = username
             self.matching_categories = []
+            self.array_of_songs_in_playlist = []
 
     def fill_up_array_of_songs_in_playlist(self, playlist):
         if self.token:
@@ -52,6 +53,7 @@ class Playlist:
 
 
     def generate_playlist(self):
+        pass
 
         main_krover = []
 
@@ -69,15 +71,15 @@ class Playlist:
 
 class MatchingCategory(object):
 
-    def __init__(self, playlist, playlist_data_for_meged_mc):
+    def __init__(self, playlist, playlist_data_for_merged_mc):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
-        if (playlist_data_for_meged_mc == None and playlist != None):
+        if (playlist_data_for_merged_mc == None and playlist != None):
             self.playlist_data = {}
             self.playlist_data = self.analyze_playlist(playlist)
-        elif (playlist_data_for_meged_mc != None and playlist== None):
-            self.playlist_data = playlist_data_for_meged_mc
+        elif (playlist_data_for_merged_mc != None and playlist== None):
+            self.playlist_data = playlist_data_for_merged_mc
         else:
             raise NameError ('Vajsing!')
         """
@@ -125,7 +127,7 @@ class MatchingCategorySong(MatchingCategory):
             if not artist_song_identifier in playlist_analysis.keys() and artist_song_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track)
+                item.append(track['uri'])
                 playlist_analysis[artist_song_identifier] = item
             else:
                 value = playlist_analysis.get(artist_song_identifier)
@@ -160,7 +162,7 @@ class MatchingCategoryAlbum(MatchingCategory):
             if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['album'])
+                item.append(track['album']['name'])
                 playlist_analysis[album_identifier] = item
             else:
                 value = playlist_analysis.get(album_identifier)
@@ -191,7 +193,7 @@ class MatchingCategoryArtist(MatchingCategory):
             if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
-                item.append(track['artists'])
+                item.append(track['artists'][0]['name'])
                 playlist_analysis[artist_identifier] = item
             else:
                 value = playlist_analysis.get(artist_identifier)
@@ -255,10 +257,11 @@ def create_matching_categories(playlist):
         playlist.matching_categories.append(category(playlist, None))
                 
 def merge_matching_categories(*matching_categories):
-    merging_algorithm = MergingAlgorithms.mc_by_compromising
-
+    #Set the alogritm to be used
+    merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
+    
     return merging_algorithm(*matching_categories)
-
+    
 def merge_playlists(*playlists):
     #Create new playlist with the same username and token as the other playlists.
     new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
@@ -296,5 +299,4 @@ def menu(self):
 
 #menu()
 
-#menu(menu)
 
