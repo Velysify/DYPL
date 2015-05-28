@@ -15,12 +15,13 @@ def mc_based_on_common_tastes(new_playlist, *matching_categories):
             merged_matching_category[entry][0] += matching_categories[0].playlist_data[entry][0]
         else:
             merged_matching_category[entry] = matching_categories[0].playlist_data[entry]
-
+        print merged_matching_category
     for entry in merged_matching_category.keys():
         if merged_matching_category[entry][0]<2:
             del merged_matching_category[entry]
     #Create a matching category of the same type and return it.
-    mc = mc.__class__(None, merged_matching_category)
+    mc = matching_categories[0].__class__(None, merged_matching_category)
+    print mc
     return mc
     #new_playlist.matching_categories.append(mc)
     
@@ -75,6 +76,7 @@ def pl_supre_best_algorith_ever(new_playlist, *playlists):
         categories_to_be_merged =[]
         for playlist in playlists:
             categories_to_be_merged.append(playlist.matching_categories[index])
-        new_playlist.matching_categories.append(PlaylistMergerClasses.merge_matching_categories(*categories_to_be_merged))
+        print categories_to_be_merged
+        PlaylistMergerClasses.merge_matching_categories(new_playlist,*categories_to_be_merged)
     #Return the playlist        
     return new_playlist
