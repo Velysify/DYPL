@@ -23,7 +23,8 @@ def funky_album_algorithm(playlist_data):
 
             for i in range(0, 1):
                 songs_to_return.append(songs_in_album[i])
-
+    """for i in range(len(songs_to_return)):
+        print songs_to_return[i]['name']"""
     return songs_to_return
 
 def funky_artist_algorithm(playlist_data):
@@ -40,7 +41,6 @@ def funky_artist_algorithm(playlist_data):
             for x in range(0, 1):
                 #fix range, with weight somehow
                 songs_to_return.append(songs_in_album[x])
-
     return songs_to_return
 
 def funky_genre_algorithm(playlist_data):
