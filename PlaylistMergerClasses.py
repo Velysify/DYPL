@@ -47,7 +47,7 @@ class Playlist:
         new_matching_category_song = MatchingCategorySong(self)
         new_matching_category_artist = MatchingCategoryArtist(self)
 
-        self.matching_categories.append(new_matching_category_song)
+        self.matching_categories.append(new_matcshing_category_song)
         self.matching_categories.append(new_matching_category_artist)
     """
 
@@ -61,9 +61,10 @@ class Playlist:
         return main_krover
 
     def create_playlist(self, list_of_songs):
+        print len(list_of_songs)
         song_list = []
-        for i in range (len(list_of_songs)):
-            song_id = list_of_songs[i]['items']
+        for i in range(len(list_of_songs)):
+            song_id = list_of_songs[i]['id']
             song_list.append(song_id)
         song_list = check_for_duplicates(song_list)
         tracks = [song_list[x:x+100] for x in xrange(0, len(song_list), 100)]
@@ -270,7 +271,7 @@ def merge_matching_categories(*matching_categories):
     
 def merge_playlists(*playlists):
     #Create new playlist with the same username and token as the other playlists.
-    new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
+    new_playlist = Playlist(playlists[0].token, 'sanna_19', None)
 
     #Merge the playlists    
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
@@ -289,7 +290,7 @@ def menu(self):
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
     #token = input("Copy the access token into the program: ")
     #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQASOyKEiUsmlgfC4y6Eop3YTwR3BT1AH7pQpM7O86uKkvc_fuAy6fgxP8tIArxwA3wzZDvCFhvX2QDLoxpFv37PtCoynx8nXbLarQbn1xMRZxPz4i3qrwCtEOx7mTXyWSsx3t2otZrgNoCfFuvCVbBeigwqinCBlYzZl1f8jTNuPAasAKVkw_NnwR2siKeTU7-pv8NMh9AU9mY35JBI9q87dDJDtO80yT5a91-K7vtl35xUnthozN18Hv3n7tGUm5_Ov-djA-Tl6WVLmxs4CKgRQY9hXYxdvDLvZHC_Tr5n'
+    token = 'BQB5Wf_UeOLLeaiYq0X9Kr5NJ7ernKnYxzl2IGh8AB4WgKKfJ5wXPp4Ra9lI8nCzgzQjZC4_bJrrTLQDk14jTEUqZbVGIYfIVT0wYna7qJmJFBFRINOBwUvCl-ArVnzZxCXGNupJZfPFvMk-kYaVUH0YPsLf3HOh1EW2T6IcG-oew0ujHw8MQKEX1HZPWrLICJbudWfCGbaC1y4nxn-Jt3TnDWBBNxygHqsurVSK0A8qEX-9q7YnNgeebxgWDMZ47LBPB8FclGhsieoESbEuSJkT0ZWNsDLND0F1X98Vo0-s'
     username = 'sanna_19' #Token and username are testdata
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
@@ -302,15 +303,15 @@ def menu(self):
                 playlist = None
         '''
     #The playlists added below are testdata
-    """p1 = Playlist(token, username, 'spotify:user:velys:playlist:2aDpdr0r4qP6YNp2227CIi')
+    p1 = Playlist(token, 'velys', 'spotify:user:velys:playlist:2aDpdr0r4qP6YNp2227CIi')
     playlists.append(p1)
-    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
-    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
+    playlists.append(Playlist(token, 'velys', 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
+    playlists.append(Playlist(token, 'velys', 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
     """
     playlists.append(Playlist(token, 'velys', 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
     playlists.append(Playlist(token, username, 'spotify:user:sanna_19:playlist:1hNFR8Y66XAibRx5xDnYiZ'))
     playlists.append(Playlist(token, 'velys', 'spotify:user:velys:playlist:0FK7E35FEHnvIGZZeN6wqG'))
-    #playlists.append(Playlist(token, username, None))
+    #playlists.append(Playlist(token, username, None))"""
     npl = merge_playlists(*playlists)
     npl.create_playlist(npl.generate_playlist())
     
