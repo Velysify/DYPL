@@ -64,7 +64,7 @@ class Playlist:
     def create_playlist(self, list_of_songs):
         song_list = []
         for i in range(len(list_of_songs)):
-            song_id = list_of_songs[i]['id']
+            song_id = list_of_songs[i]['items']
             song_list.append(song_id)
         song_list = check_for_duplicates(song_list)
         tracks = [song_list[x:x+100] for x in xrange(0, len(song_list), 100)]
@@ -165,7 +165,8 @@ class MatchingCategoryAlbum(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            album_identifier = (track['album']['name']).encode('utf-8')
+            album_identifier = track['album']['name']
+            album_identifier = album_identifier.encode('utf-8')
             if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -196,7 +197,8 @@ class MatchingCategoryArtist(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            artist_identifier = str(track['artists'][0]['name'])
+            artist_identifier = track['artists'][0]['name']
+            artist_identifier = artist_identifier.encode('utf-8')
             if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -210,9 +212,9 @@ class MatchingCategoryArtist(MatchingCategory):
         return playlist_analysis
 
     def generate_playlist(self):
+        pass
+    #self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
 
-        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(self.playlist_data)
-        return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist, playlist_data_for_merged_mc):
@@ -316,6 +318,33 @@ def menu(self):
     npl = merge_playlists(*playlists)
     npl.create_playlist(npl.generate_playlist())
     
-#menu(menu)
+    token = 'BQB3obso9R7VTXTSvq63KHYiaMEdkAkWzFxWJxaxO8PzqioQNKa-lojv--GBUgi2AfH6GtoMtEnmF_nNilGwviuvFIGvhsX1B5eFrpXvD3ESVl91LDZK9BkRE6QII9THOLOgzmKq_MHQztOfrQhPkt6O3gBi3B8QktMgAHGOUuDySvgOF6I8D5FkChNUW3pcgy95aNDprUmRM_U'
+    username = "littaly"
+    empty_playlist = Playlist(token, username, None)
+    metal_and_top40_playlist = Playlist(token, username, '66bduhu9Juv1oeKvdYV4lQ')
+    classic_hiphop_and_rock_playlist = Playlist(token, username, '0LNfNIbJBPPNt8mCM8GQ1p')
+    schlager_and_pop_playlist = Playlist(token, username, '1GKhWgfJoDrQEnPczfNCAh')
+
+    merged_playlist = self.merge_playlists(metal_and_top40_playlist, classic_hiphop_and_rock_playlist, schlager_and_pop_playlist)
+
+
+    mc1 = MatchingCategorySong(metal_and_top40_playlist, None)
+    mc2 = MatchingCategorySong(classic_hiphop_and_rock_playlist, None)
+    mc3 = MatchingCategorySong(schlager_and_pop_playlist, None)
+
+    #print(mc1.playlist_data)
+    #print(mc2.playlist_data)
+
+
+    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
+    for mc in merged_playlist.matching_categories:
+        print mc
+
+
+
+
+
+#menu()
+
 
 
