@@ -294,7 +294,7 @@ def menu(self):
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
     #token = input("Copy the access token into the program: ")
     #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQB7WiWTveUQHLvUidY7_sjMoDA2x7sfu1B9ly-mXkXYSsKvIhgGwcYu1KC9PZiqE01i4zXKqfa9-1Uau-6YDUTMuOtiWgeSkQCZP12z5w4_06jg0022GTKcJfUhzdOrmapFIzd3o5UqJK1q0pnqwpQ-7oHrr2Yu0W9_X8C_Lk9pP7LsBPD0F9ssKNlu9a2dvKJUf4PCDI1AFzHOWIwn0pM6avXpUNE9llJ7NhaeYJiHgRzA'
+    token = 'BQDdCsYUvwE14-ayV3b0xQhOSqSIZEW-tHK8xWhY_GPv7FozGaO9KiehDw6bPz6Knl28fyW42UMmdpw0BJahPW823GV2g91L9hzG013yA_C2qkM3_TaC_Itd2ZD7DyrpiIX0HLxih5cfK2cehG9pFOhtYwE4bwnrSHVh6-iHUP9Jqj3EHjeqivDRR3uErQ6ir59jDXxvLLE5xA-ihTCp-_9IzxotWW-utJHIxIsj-_G4haBcwytem-3xFctD-bc0DtXZtMChU2fBkxUzVeLlOVqreiv8B-kghyRkaT-pefeN'
     username = 'velys' #Token and username are testdata
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
@@ -312,8 +312,8 @@ def menu(self):
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
     """
-    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
-    playlists.append(Playlist(token, 'sanna_19', 'spotify:user:sanna_19:playlist:1hNFR8Y66XAibRx5xDnYiZ'))
+    playlists.append(Playlist(token, 'kygoofficial', 'spotify:user:kygoofficial:playlist:7wYC2trtKwO73LskQGJLas'))
+    playlists.append(Playlist(token, 'sanna_19', 'spotify:user:sanna_19:playlist:1cC4fqs5YtUlmYd6t4T4Ap'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:0FK7E35FEHnvIGZZeN6wqG'))
     #playlists.append(Playlist(token, username, None))
     
