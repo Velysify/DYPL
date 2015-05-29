@@ -213,9 +213,9 @@ class MatchingCategoryArtist(MatchingCategory):
         return playlist_analysis
 
     def generate_playlist(self):
-        pass
-    #self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
-
+        
+        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(self.playlist_data)
+        return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist, playlist_data_for_merged_mc):
@@ -267,7 +267,7 @@ def create_matching_categories(playlist):
                 
 def merge_matching_categories(*matching_categories):
     #Set the alogritm to be used
-    merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
+    merging_algorithm = MergingAlgorithms.mc_by_compromising
     
     return merging_algorithm(*matching_categories)
     
@@ -291,7 +291,7 @@ def menu(self):
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
     #token = input("Copy the access token into the program: ")
     #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQB5Wf_UeOLLeaiYq0X9Kr5NJ7ernKnYxzl2IGh8AB4WgKKfJ5wXPp4Ra9lI8nCzgzQjZC4_bJrrTLQDk14jTEUqZbVGIYfIVT0wYna7qJmJFBFRINOBwUvCl-ArVnzZxCXGNupJZfPFvMk-kYaVUH0YPsLf3HOh1EW2T6IcG-oew0ujHw8MQKEX1HZPWrLICJbudWfCGbaC1y4nxn-Jt3TnDWBBNxygHqsurVSK0A8qEX-9q7YnNgeebxgWDMZ47LBPB8FclGhsieoESbEuSJkT0ZWNsDLND0F1X98Vo0-s'
+    token = 'BQDhNTTchXpGJY-4BuMNuGsJ0KSUviTP86HF_70CMY_eHjFZYm_NcqGFitpesetB9SzI7U_d0r0jp5CC8inkYOW0WQtl4xQpukUsmYS2bzrwzskwaJl3NbeUEUIU-Y9P37sLyy1N4zxmpeqIWGiRXUNoZOTZVuvxS9vyAVPsyx2TuumRP7oZhygGDxWaOH_HnAKuTjTC0Ob2j1KIc86vntZxQlUnpP1tKVrN5-Ejr7AgAK84_hajPZosQnQjASeqsgkSVJiZ54LzUw3fPVdzmSMohCq5YeNNbIxWSbgyNWjr'
     username = 'sanna_19' #Token and username are testdata
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
@@ -306,8 +306,8 @@ def menu(self):
     #The playlists added below are testdata
     p1 = Playlist(token, 'velys', 'spotify:user:velys:playlist:2aDpdr0r4qP6YNp2227CIi')
     playlists.append(p1)
-    playlists.append(Playlist(token, 'velys', 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
-    playlists.append(Playlist(token, 'velys', 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
+    playlists.append(Playlist(token, 'kygoofficial', 'spotify:user:kygoofficial:playlist:7wYC2trtKwO73LskQGJLas'))
+    playlists.append(Playlist(token, 'sanna_19', 'spotify:user:sanna_19:playlist:1cC4fqs5YtUlmYd6t4T4Ap'))
     """
     playlists.append(Playlist(token, 'velys', 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
     playlists.append(Playlist(token, username, 'spotify:user:sanna_19:playlist:1hNFR8Y66XAibRx5xDnYiZ'))

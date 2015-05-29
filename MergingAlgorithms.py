@@ -60,32 +60,34 @@ def mc_by_compromising(*matching_categories):
 
     #Calculates a threshold to be used later when determining if, and to what extent, a large enough occurence of one item in a single matching category earns it a place in the merged matching category
     #The threshold is the total amount of weights divided by the total amount of items. That is, the average amount of times each item appears in a matching category.
-    threshold = total_playlist_weight/len(all_items)
-    print "Total playlist weight: "+ str(total_playlist_weight)
-    print "length of all items: " + str(len(all_items))
-    for entry in merged_matching_category.keys():
+    if all_items:
+        
+        threshold = total_playlist_weight/len(all_items)
+        print "Total playlist weight: "+ str(total_playlist_weight)
+        print "length of all items: " + str(len(all_items))
+        for entry in merged_matching_category.keys():
 
-        #Checks how many of the original playlists the entry was present in
-        number_of_mcs_present_in = 0
-        for x in items_in_each_playlist:
-            if entry in items_in_each_playlist: number_of_mcs_present_in += 1
+            #Checks how many of the original playlists the entry was present in
+            number_of_mcs_present_in = 0
+            for x in items_in_each_playlist:
+                if entry in items_in_each_playlist: number_of_mcs_present_in += 1
 
-       #Lets the entry be in the list (maintaining its total weight) if it was present in more than one of the  original matching categories
-        if (number_of_mcs_present_in>1):
-            pass
-        #If not, but it's present in the currently selected original matching category, it is left in, but with its weight reduced to 1
-        elif (entry in items_in_each_playlist[current_mc]):
-            merged_matching_category[entry][0] = 1
-        #Lastly, check if the entry is above the threshold for inclusion. That is, if it appears in a matching category more times than average.
-        #If it does, let it stay, but with its weight divided by the average.
-        elif (merged_matching_category[entry][0]>threshold):
+           #Lets the entry be in the list (maintaining its total weight) if it was present in more than one of the  original matching categories
+            if (number_of_mcs_present_in>1):
+                pass
+            #If not, but it's present in the currently selected original matching category, it is left in, but with its weight reduced to 1
+            elif (entry in items_in_each_playlist[current_mc]):
+                merged_matching_category[entry][0] = 1
+            #Lastly, check if the entry is above the threshold for inclusion. That is, if it appears in a matching category more times than average.
+            #If it does, let it stay, but with its weight divided by the average.
+            elif (merged_matching_category[entry][0]>threshold):
 
-            print "-------------------------yo, I'm here now! " + str(merged_matching_category[entry][0]) + " Threshold is: "+ str(threshold)
-            merged_matching_category[entry][0] = merged_matching_category[entry][0]/threshold
-            if merged_matching_category[entry][0]<1: del merged_matching_category[entry]
-            else: print "adding with weight: "+str(merged_matching_category[entry][0])
-        current_mc += 1
-        if current_mc>number_of_merging_categories-1: current_mc = 0
+                print "-------------------------yo, I'm here now! " + str(merged_matching_category[entry][0]) + " Threshold is: "+ str(threshold)
+                merged_matching_category[entry][0] = merged_matching_category[entry][0]/threshold
+                if merged_matching_category[entry][0]<1: del merged_matching_category[entry]
+                #else: print "adding with weight: "+str(merged_matching_category[entry][0])
+            current_mc += 1
+            if current_mc>number_of_merging_categories-1: current_mc = 0
 
     return matching_categories[0].__class__(None, merged_matching_category)
 
