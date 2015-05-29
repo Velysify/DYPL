@@ -7,7 +7,7 @@ def mc_based_on_common_tastes(*matching_categories):
     #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
 
-
+    
     for mc in matching_categories:
         for entry in mc.playlist_data.keys():
             if entry in merged_matching_category:
@@ -88,6 +88,7 @@ def mc_by_compromising(*matching_categories):
             else: print "adding with weight: "+str(merged_matching_category[entry][0])
         current_mc += 1
         if current_mc>number_of_merging_categories-1: current_mc = 0
+
 
     return matching_categories[0].__class__(None, merged_matching_category, harmony_rating)
 
