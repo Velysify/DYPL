@@ -1,4 +1,5 @@
 import spotipy
+import random
 
 spotify = spotipy.Spotify()
 
@@ -34,8 +35,8 @@ def funky_artist_algorithm(playlist_data):
         tmplist = playlist_data.get(key)
         weight_of_artist = tmplist[0]
         top_track_catalog = spotify.artist_top_tracks(tmplist[1][0]['id'])
-
-        songs_to_return.extend(top_track_catalog['tracks'])
+        index = random.randint(0, len(top_track_catalog)-1)
+        songs_to_return.append(top_track_catalog['tracks'][index])
 
     return songs_to_return
 

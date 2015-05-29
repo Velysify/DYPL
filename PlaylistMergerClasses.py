@@ -64,7 +64,7 @@ class Playlist:
     def create_playlist(self, list_of_songs):
         song_list = []
         for i in range(len(list_of_songs)):
-            song_id = list_of_songs[i]['items']
+            song_id = list_of_songs[i]['id']
             song_list.append(song_id)
         song_list = check_for_duplicates(song_list)
         tracks = [song_list[x:x+100] for x in xrange(0, len(song_list), 100)]
@@ -212,9 +212,8 @@ class MatchingCategoryArtist(MatchingCategory):
         return playlist_analysis
 
     def generate_playlist(self):
-        pass
-    #self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
-
+        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(self.playlist_data)
+        return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist, playlist_data_for_merged_mc):
@@ -222,12 +221,15 @@ class MatchingCategoryGenre(MatchingCategory):
     #This method have extremly long runtime. 
     def analyze_playlist(self,playlist):
         playlist_analysis = {}
-        for track in playlist.array_of_songs_in_playlist:
-
+        tracklist = [playlist.array_of_songs_in_playlist[x:x+50] for x in xrange(0, len(playlist.array_of_songs_in_playlist), 50)]
+        for tracks in tracklist:
+            href = "https://api.spotify.com/v1/artists/?ids="
+            for track in tracks:
+                href += track['artists'][0]['id']+","
+            href = href[:-1]
             #Try until HTTP Error 429: Too many requests is raises.
             try:
                 #For each line in the href: look for genres and clean them to make searchable strings.
-                href = track['artists'][0]['href']
                 for line in urllib2.urlopen(href):
                     genre = re.search('\"\s*genres\" \: .*', line)
                     if genre:
@@ -250,9 +252,8 @@ class MatchingCategoryGenre(MatchingCategory):
                     time.sleep(float(err.hdrs.get('Retry-After')))         
                 else:
                     raise
-                                
+                                    
         return playlist_analysis
-
     def generate_playlist(self):
 
         self.song_list = PlaylistGeneratorAlgorithms.funky_genre_algorithm(self.playlist_data)
@@ -266,7 +267,7 @@ def create_matching_categories(playlist):
                 
 def merge_matching_categories(*matching_categories):
     #Set the alogritm to be used
-    merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
+    merging_algorithm = MergingAlgorithms.mc_by_compromising
     
     return merging_algorithm(*matching_categories)
     
@@ -292,7 +293,7 @@ def menu(self):
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
     #token = input("Copy the access token into the program: ")
     #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQD4ztu4ioTIIHiRSkuUblmYPGZKAd5Fu-9o9RKS0T360nPjTaokxiDAOQXtde1OeIaur1LeTdEQMC6hKkMZuKHnCnU7vLpm-QWlxWCJpjK_marzUn6X_jXbzBNSoaYcJTsagtcplvA4cFVlkDiUQTN2CMLc62T8UqR1-sgoYOa_j4vcYp5eWHo-5hTHR7kdAc7uIrAZ9omrp9N1ZaOZJNNbEWIHshoTRzPjCr-I-Q7X_EIg'
+    token = 'BQB7WiWTveUQHLvUidY7_sjMoDA2x7sfu1B9ly-mXkXYSsKvIhgGwcYu1KC9PZiqE01i4zXKqfa9-1Uau-6YDUTMuOtiWgeSkQCZP12z5w4_06jg0022GTKcJfUhzdOrmapFIzd3o5UqJK1q0pnqwpQ-7oHrr2Yu0W9_X8C_Lk9pP7LsBPD0F9ssKNlu9a2dvKJUf4PCDI1AFzHOWIwn0pM6avXpUNE9llJ7NhaeYJiHgRzA'
     username = 'velys' #Token and username are testdata
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
@@ -305,7 +306,7 @@ def menu(self):
                 playlist = None
         '''
     #The playlists added below are testdata
-    p1 = Playlist(token, username, 'spotify:user:velys:playlist:2aDpdr0r4qP6YNp2227CIi')
+    """p1 = Playlist(token, username, 'spotify:user:velys:playlist:2aDpdr0r4qP6YNp2227CIi')
     playlists.append(p1)
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
@@ -313,37 +314,10 @@ def menu(self):
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
     playlists.append(Playlist(token, 'sanna_19', 'spotify:user:sanna_19:playlist:1hNFR8Y66XAibRx5xDnYiZ'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:0FK7E35FEHnvIGZZeN6wqG'))
-    #playlists.append(Playlist(token, username, None))"""
+    #playlists.append(Playlist(token, username, None))
     
     npl = merge_playlists(*playlists)
     npl.create_playlist(npl.generate_playlist())
-    
-    token = 'BQB3obso9R7VTXTSvq63KHYiaMEdkAkWzFxWJxaxO8PzqioQNKa-lojv--GBUgi2AfH6GtoMtEnmF_nNilGwviuvFIGvhsX1B5eFrpXvD3ESVl91LDZK9BkRE6QII9THOLOgzmKq_MHQztOfrQhPkt6O3gBi3B8QktMgAHGOUuDySvgOF6I8D5FkChNUW3pcgy95aNDprUmRM_U'
-    username = "littaly"
-    empty_playlist = Playlist(token, username, None)
-    metal_and_top40_playlist = Playlist(token, username, '66bduhu9Juv1oeKvdYV4lQ')
-    classic_hiphop_and_rock_playlist = Playlist(token, username, '0LNfNIbJBPPNt8mCM8GQ1p')
-    schlager_and_pop_playlist = Playlist(token, username, '1GKhWgfJoDrQEnPczfNCAh')
-
-    merged_playlist = self.merge_playlists(metal_and_top40_playlist, classic_hiphop_and_rock_playlist, schlager_and_pop_playlist)
-
-
-    mc1 = MatchingCategorySong(metal_and_top40_playlist, None)
-    mc2 = MatchingCategorySong(classic_hiphop_and_rock_playlist, None)
-    mc3 = MatchingCategorySong(schlager_and_pop_playlist, None)
-
-    #print(mc1.playlist_data)
-    #print(mc2.playlist_data)
-
-
-    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
-    for mc in merged_playlist.matching_categories:
-        print mc
-
-
-
-
-
 #menu()
 
 
