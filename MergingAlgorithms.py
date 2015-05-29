@@ -6,7 +6,7 @@ def mc_based_on_common_tastes(*matching_categories):
     #Returns a matching_category containing only the songs present in all of the playlists
     #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
-    
+
 
     for mc in matching_categories:
         for entry in mc.playlist_data.keys():
@@ -22,6 +22,8 @@ def mc_based_on_common_tastes(*matching_categories):
 
 def mc_by_compromising(*matching_categories):
     merged_matching_category = {}
+    harmony_rating = 0
+
 
     number_of_merging_categories = len(matching_categories)
     total_playlist_weight = 0
@@ -72,7 +74,7 @@ def mc_by_compromising(*matching_categories):
 
        #Lets the entry be in the list (maintaining its total weight) if it was present in more than one of the  original matching categories
         if (number_of_mcs_present_in>1):
-            pass
+            harmony_rating += number_of_mcs_present_in
         #If not, but it's present in the currently selected original matching category, it is left in, but with its weight reduced to 1
         elif (entry in items_in_each_playlist[current_mc]):
             merged_matching_category[entry][0] = 1
@@ -87,7 +89,7 @@ def mc_by_compromising(*matching_categories):
         current_mc += 1
         if current_mc>number_of_merging_categories-1: current_mc = 0
 
-    return matching_categories[0].__class__(None, merged_matching_category)
+    return matching_categories[0].__class__(None, merged_matching_category, harmony_rating)
 
 
 def pl_supre_best_algorith_ever(new_playlist, *playlists):

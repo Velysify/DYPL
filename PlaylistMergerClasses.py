@@ -78,15 +78,18 @@ class Playlist:
 
 class MatchingCategory(object):
 
-    def __init__(self, playlist, playlist_data_for_merged_mc):
+    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
         if (playlist_data_for_merged_mc == None and playlist != None):
             self.playlist_data = {}
             self.playlist_data = self.analyze_playlist(playlist)
+            self.harmony_rating = harmony_rating
         elif (playlist_data_for_merged_mc != None and playlist== None):
             self.playlist_data = playlist_data_for_merged_mc
+            self.harmony_rating = harmony_rating
+
         else:
             raise NameError ('Vajsing!')
         """
@@ -287,7 +290,7 @@ def check_for_duplicates(song_list):
 
 def  menu(self):
     
-    token = 'BQB3obso9R7VTXTSvq63KHYiaMEdkAkWzFxWJxaxO8PzqioQNKa-lojv--GBUgi2AfH6GtoMtEnmF_nNilGwviuvFIGvhsX1B5eFrpXvD3ESVl91LDZK9BkRE6QII9THOLOgzmKq_MHQztOfrQhPkt6O3gBi3B8QktMgAHGOUuDySvgOF6I8D5FkChNUW3pcgy95aNDprUmRM_U'
+    token = 'BQCDltjecmRr1GpeXrFZJP2WyjNtYsgonM-c8TwCjmj057gSugaxTplcMDCa5H3H4z5RWhY25l2lR0r0NFmLc4TJU8dguUd3QWdgrer7yVPtpmHwfAJrWADs7gFccNsxomhDtnpGAL9u5V5tQLA7k8I5Tpzc_tLe0W1JzxeEEoXAQdX8rKLE-hceXov77ApNK-auXRh-h6X1slg'
     username = "littaly"
     empty_playlist = Playlist(token, username, None)
     metal_and_top40_playlist = Playlist(token, username, '66bduhu9Juv1oeKvdYV4lQ')
