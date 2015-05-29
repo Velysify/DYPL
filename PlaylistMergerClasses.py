@@ -166,7 +166,8 @@ class MatchingCategoryAlbum(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            album_identifier = (track['album']['name']).encode('utf-8')
+            album_identifier = track['album']['name']
+            album_identifier = album_identifier.encode('utf-8')
             if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -197,7 +198,8 @@ class MatchingCategoryArtist(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            artist_identifier = str(track['artists'][0]['name'])
+            artist_identifier = track['artists'][0]['name']
+            artist_identifier = artist_identifier.encode('utf-8')
             if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -211,9 +213,9 @@ class MatchingCategoryArtist(MatchingCategory):
         return playlist_analysis
 
     def generate_playlist(self):
+        pass
+    #self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
 
-        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(self.playlist_data)
-        return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist, playlist_data_for_merged_mc):
@@ -284,7 +286,6 @@ def check_for_duplicates(song_list):
    map(set.__setitem__, song_list, [])
    return set.keys()
 
-
 def menu(self):
     #username = input("Please enter your spotify username: ")
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
@@ -314,7 +315,11 @@ def menu(self):
     #playlists.append(Playlist(token, username, None))"""
     npl = merge_playlists(*playlists)
     npl.create_playlist(npl.generate_playlist())
-    
-#menu(menu)
+
+
+
+
+#menu()
+
 
 
