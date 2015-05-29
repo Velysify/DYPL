@@ -151,7 +151,8 @@ class MatchingCategoryAlbum(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            album_identifier = (track['album']['name']).encode('utf-8')
+            album_identifier = track['album']['name']
+            album_identifier = album_identifier.encode('utf-8')
             if not album_identifier in playlist_analysis.keys() and album_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -182,7 +183,8 @@ class MatchingCategoryArtist(MatchingCategory):
         for track in playlist.array_of_songs_in_playlist:
             #Creates an identifier for each track based on song and artist name, intended to work as a key in the dictionary
             #Using this identifier rather than the track ID means a song from an artist will always count as the same, even if it's taken from two different albums
-            artist_identifier = str(track['artists'][0]['name'])
+            artist_identifier = track['artists'][0]['name']
+            artist_identifier = artist_identifier.encode('utf-8')
             if not artist_identifier in playlist_analysis.keys() and artist_identifier not in self.playlist_data.keys():
                 item = []
                 item.append(1)
@@ -197,7 +199,7 @@ class MatchingCategoryArtist(MatchingCategory):
 
     def generate_playlist(self):
 
-        self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
+        #self.song_list = PlaylistGeneratorAlgorithms.funky_artist_algorithm(songs_to_algorithmize)
         return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
@@ -258,39 +260,30 @@ def merge_playlists(*playlists):
     return merging_algorithm(new_playlist, *playlists)
 
 
-def menu(self):
-<<<<<<< HEAD
-
-    token = 'BQDSTSMnc1HoKt_D8JHkFc_A7RzA2Yimz4JRUuzsP7CewC4scPpsbGJnZVZV0dqreM6VfZAeLdRJ3Ym10nPXtjPx7LrZg-xCfx4Be6sXLPjIXnXM_0ilAQXoW7smuH4bPXZpBnPCkbO4pYuXxF1NTltloEsYpCKzPqrR05u6DH2pK2sL9rT8A9Krj2xTMFPgQ6OSF0RdcxO21VOhbwf2QnfwBTTL6Hej47kDeDRlKFf-uoyFOanP9W44meG2nydln9kT_mwQGN7NuuqKvPl-zulWw729mIOGIF3emMAJHNw2'
-=======
+def  menu(self):
     
-    token = 'BQAeXzaZkeOREkuIUzlK2ttdL9Mv_eBf2By424bHoERnJlSwD1UdJ_ZitB7Z-U7O0mN5pTCPsRS62p3O14RNeeiGceJhQPYSh6JUanftlNgv37yN_9sHyyb7rA8cyQHtYSwKo3CSuUruMiWbEQN6JtTNNbazcnrhFcxA_HIKkhaoB_JqI8aQ7j6CbxkW5pS9KL1QBay59xH-BygY_ph26YCu4eA0xO_qd8HwSi69AWp8tjKeSIhj9cQDIyicX55hvT8DHBlAzT-AWvHaiiavRHEVdqeBP7Qi0ATyKNRw8GVl'
->>>>>>> 48c270d8283cafc831af7b88204f0f1800bae27c
-    username = "sanna_19"
+    token = 'BQB3obso9R7VTXTSvq63KHYiaMEdkAkWzFxWJxaxO8PzqioQNKa-lojv--GBUgi2AfH6GtoMtEnmF_nNilGwviuvFIGvhsX1B5eFrpXvD3ESVl91LDZK9BkRE6QII9THOLOgzmKq_MHQztOfrQhPkt6O3gBi3B8QktMgAHGOUuDySvgOF6I8D5FkChNUW3pcgy95aNDprUmRM_U'
+    username = "littaly"
     empty_playlist = Playlist(token, username, None)
-    playlist1 = Playlist(token, username, "3BVqFufvKtRenYZjG9y3to")
-    playlist2 = Playlist(token, username, '7jqQCJtZsORrU5X2rK9px0')
-    playlist3 = Playlist(token, username, '1hNFR8Y66XAibRx5xDnYiZ')
+    metal_and_top40_playlist = Playlist(token, username, '66bduhu9Juv1oeKvdYV4lQ')
+    classic_hiphop_and_rock_playlist = Playlist(token, username, '0LNfNIbJBPPNt8mCM8GQ1p')
+    schlager_and_pop_playlist = Playlist(token, username, '1GKhWgfJoDrQEnPczfNCAh')
 
-    merged_playlist = self.merge_playlists(playlist1, playlist2, playlist3)
+    merged_playlist = self.merge_playlists(metal_and_top40_playlist, classic_hiphop_and_rock_playlist, schlager_and_pop_playlist)
 
 
-    mc1 = MatchingCategorySong(playlist1, None)
-    mc2 = MatchingCategorySong(playlist2, None)
-    mc3 = MatchingCategorySong(playlist3, None)
+    mc1 = MatchingCategorySong(metal_and_top40_playlist, None)
+    mc2 = MatchingCategorySong(classic_hiphop_and_rock_playlist, None)
+    mc3 = MatchingCategorySong(schlager_and_pop_playlist, None)
 
     #print(mc1.playlist_data)
     #print(mc2.playlist_data)
 
-<<<<<<< HEAD
-    print "here comes the merged playlist: "
+
+    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
     for mc in merged_playlist.matching_categories:
         print mc
-=======
-    #print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
 
-    print 'hej hopp', merged_playlist.generate_playlist()
->>>>>>> 48c270d8283cafc831af7b88204f0f1800bae27c
 
 
 
