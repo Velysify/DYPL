@@ -22,8 +22,13 @@ def funky_album_algorithm(playlist_data):
             paging_object = spotify.album_tracks(tmplist[1]['id'])
             songs_in_album = paging_object['items']
 
-            for i in range(0, 1):
-                songs_to_return.append(songs_in_album[i])
+            if weight_of_album > len(songs_in_album):
+                for i in range(0, len(songs_in_album)):
+                    songs_to_return.append(songs_in_album[i])
+            else:
+                for i in range(0, weight_of_album):
+                    random_index = random.randint(0, len(songs_in_album)-1)
+                    songs_to_return.append(songs_in_album[random_index])
 
     return songs_to_return
 

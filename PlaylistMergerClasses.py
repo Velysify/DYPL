@@ -47,7 +47,7 @@ class Playlist:
         new_matching_category_song = MatchingCategorySong(self)
         new_matching_category_artist = MatchingCategoryArtist(self)
 
-        self.matching_categories.append(new_matching_category_song)
+        self.matching_categories.append(new_matcshing_category_song)
         self.matching_categories.append(new_matching_category_artist)
     """
 
@@ -62,6 +62,7 @@ class Playlist:
         return main_krover
 
     def create_playlist(self, list_of_songs):
+        print len(list_of_songs)
         song_list = []
         for i in range(len(list_of_songs)):
             song_id = list_of_songs[i]['id']
@@ -274,7 +275,7 @@ def merge_matching_categories(*matching_categories):
 def merge_playlists(*playlists):
     print playlists
     #Create new playlist with the same username and token as the other playlists.
-    new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
+    new_playlist = Playlist(playlists[0].token, 'sanna_19', None)
 
     #Merge the playlists    
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever

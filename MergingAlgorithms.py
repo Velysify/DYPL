@@ -59,8 +59,8 @@ def mc_by_compromising(*matching_categories):
 
     #Calculates a threshold to be used later when determining if, and to what extent, a large enough occurence of one item in a single matching category earns it a place in the merged matching category
     #The threshold is the total amount of weights divided by the total amount of items. That is, the average amount of times each item appears in a matching category.
-    print len(all_items)
     if all_items:
+        
         threshold = total_playlist_weight/len(all_items)
         print "Total playlist weight: "+ str(total_playlist_weight)
         print "length of all items: " + str(len(all_items))
@@ -84,7 +84,7 @@ def mc_by_compromising(*matching_categories):
                 print "-------------------------yo, I'm here now! " + str(merged_matching_category[entry][0]) + " Threshold is: "+ str(threshold)
                 merged_matching_category[entry][0] = merged_matching_category[entry][0]/threshold
                 if merged_matching_category[entry][0]<1: del merged_matching_category[entry]
-                else: print "adding with weight: "+str(merged_matching_category[entry][0])
+                #else: print "adding with weight: "+str(merged_matching_category[entry][0])
             current_mc += 1
             if current_mc>number_of_merging_categories-1: current_mc = 0
 
