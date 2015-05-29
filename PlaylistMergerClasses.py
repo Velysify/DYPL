@@ -88,15 +88,18 @@ class Playlist:
 
 class MatchingCategory(object):
 
-    def __init__(self, playlist, playlist_data_for_merged_mc):
+    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
         if (playlist_data_for_merged_mc == None and playlist != None):
             self.playlist_data = {}
             self.playlist_data = self.analyze_playlist(playlist)
+            self.harmony_rating = harmony_rating
         elif (playlist_data_for_merged_mc != None and playlist== None):
             self.playlist_data = playlist_data_for_merged_mc
+            self.harmony_rating = harmony_rating
+
         else:
             raise NameError ('Vajsing!')
         """
@@ -302,7 +305,7 @@ def menu(self):
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
     #token = input("Copy the access token into the program: ")
     #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQDX3kI_h5ALHHge-qdZ0ELHlM7XW648pNLBBqKY6_u_LITQeT-poHM0AQZgNKA8yY-3ztl7DWNJ17osd9Q9YcrkFurd7Kh-ewYzw2t_e7uydISwRPP7HYb-V-38xZs3LzWaGXaSx2Xv89ueP-E_MORNQ5Km3d0vYFwOaKZDIxIjIBaqwQas0KRl9yaK27IKlfWqNAegeYNqLKEIGa6qoubuJYVBmiFwUcxy9ulBHQaJqWZ1'
+    token = 'BQDdCsYUvwE14-ayV3b0xQhOSqSIZEW-tHK8xWhY_GPv7FozGaO9KiehDw6bPz6Knl28fyW42UMmdpw0BJahPW823GV2g91L9hzG013yA_C2qkM3_TaC_Itd2ZD7DyrpiIX0HLxih5cfK2cehG9pFOhtYwE4bwnrSHVh6-iHUP9Jqj3EHjeqivDRR3uErQ6ir59jDXxvLLE5xA-ihTCp-_9IzxotWW-utJHIxIsj-_G4haBcwytem-3xFctD-bc0DtXZtMChU2fBkxUzVeLlOVqreiv8B-kghyRkaT-pefeN'
     username = 'velys' #Token and username are testdata
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
@@ -320,13 +323,38 @@ def menu(self):
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
     """
-    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
-    playlists.append(Playlist(token, 'sanna_19', 'spotify:user:sanna_19:playlist:1hNFR8Y66XAibRx5xDnYiZ'))
+    playlists.append(Playlist(token, 'kygoofficial', 'spotify:user:kygoofficial:playlist:7wYC2trtKwO73LskQGJLas'))
+    playlists.append(Playlist(token, 'sanna_19', 'spotify:user:sanna_19:playlist:1cC4fqs5YtUlmYd6t4T4Ap'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:0FK7E35FEHnvIGZZeN6wqG'))
     #playlists.append(Playlist(token, username, None)
     
-    npl = merge_playlists(*playlists)
-    npl.create_playlist(npl.generate_playlist())
+    token = 'BQCDltjecmRr1GpeXrFZJP2WyjNtYsgonM-c8TwCjmj057gSugaxTplcMDCa5H3H4z5RWhY25l2lR0r0NFmLc4TJU8dguUd3QWdgrer7yVPtpmHwfAJrWADs7gFccNsxomhDtnpGAL9u5V5tQLA7k8I5Tpzc_tLe0W1JzxeEEoXAQdX8rKLE-hceXov77ApNK-auXRh-h6X1slg'
+    username = "littaly"
+    empty_playlist = Playlist(token, username, None)
+    metal_and_top40_playlist = Playlist(token, username, '66bduhu9Juv1oeKvdYV4lQ')
+    classic_hiphop_and_rock_playlist = Playlist(token, username, '0LNfNIbJBPPNt8mCM8GQ1p')
+    schlager_and_pop_playlist = Playlist(token, username, '1GKhWgfJoDrQEnPczfNCAh')
+
+    merged_playlist = self.merge_playlists(metal_and_top40_playlist, classic_hiphop_and_rock_playlist, schlager_and_pop_playlist)
+
+
+    mc1 = MatchingCategorySong(metal_and_top40_playlist, None)
+    mc2 = MatchingCategorySong(classic_hiphop_and_rock_playlist, None)
+    mc3 = MatchingCategorySong(schlager_and_pop_playlist, None)
+
+    #print(mc1.playlist_data)
+    #print(mc2.playlist_data)
+
+
+    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
+    for mc in merged_playlist.matching_categories:
+        print mc
+
+
+
+
+
+
 #menu()
 
 
