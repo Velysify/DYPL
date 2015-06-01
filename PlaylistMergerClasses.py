@@ -63,7 +63,7 @@ class Playlist:
             main_krover.extend(krover)
         return main_krover
 
-    def create_playlist(self, list_of_songs):
+    def create_playlist(self, list_of_songs, name_of_playlist):
         song_list = []
         limit = None
         for i in range(len(list_of_songs)):
@@ -77,7 +77,7 @@ class Playlist:
         #If there is still a token create and fill the new playlist with tracks.
         if self.token:
             sp = spotipy.Spotify(auth=self.token)
-            playlist = sp.user_playlist_create(self.username,"Merged Playlist!")
+            playlist = sp.user_playlist_create(self.username,name_of_playlist)
             if not limit:
                 for tracks_to_add in tracks:
                     sp.user_playlist_add_tracks(self.username, playlist['id'],tracks_to_add)
@@ -286,7 +286,7 @@ def check_for_duplicates(song_list):
    return set.keys()
   
 
-def menu(self, username, token, *playlist_uris):
+def menu(self, username, token, name_of_playlist, *playlist_uris):
 
     #token = 'BQCDltjecmRr1GpeXrFZJP2WyjNtYsgonM-c8TwCjmj057gSugaxTplcMDCa5H3H4z5RWhY25l2lR0r0NFmLc4TJU8dguUd3QWdgrer7yVPtpmHwfAJrWADs7gFccNsxomhDtnpGAL9u5V5tQLA7k8I5Tpzc_tLe0W1JzxeEEoXAQdX8rKLE-hceXov77ApNK-auXRh-h6X1slg'
     #username = "littaly"
@@ -305,7 +305,7 @@ def menu(self, username, token, *playlist_uris):
 
     merged_playlist = self.merge_playlists(*playlists)
 
-    merged_playlist.create_playlist(merged_playlist.generate_playlist())
+    merged_playlist.create_playlist(merged_playlist.generate_playlist(name_of_playlist))
 
     print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
     for mc in merged_playlist.matching_categories:
