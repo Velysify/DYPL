@@ -9,14 +9,17 @@ import spotipy.util as util
 
 class Playlist:
 
-    def __init__(self, token, username, playlist):
+    def __init__(self, token, username, playlist, playlist_max_size = 1000):
         if playlist:
+            print "username:  "+str(username)
+            print "playlist: "+str(playlist)
             self.token = token
             self.username = username
             self.playlist = playlist
             self.array_of_songs_in_playlist = []
             self.matching_categories = []
             self.fill_up_array_of_songs_in_playlist(self.playlist)
+            self.playlist_max_size = playlist_max_size
 
             create_matching_categories(self)
 
@@ -109,9 +112,9 @@ class MatchingCategory(object):
     
 class MatchingCategorySong(MatchingCategory):
 
-    def __init__(self, playlist, playlist_data_for_merged_mc):
+    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
 
-        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
+        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc, harmony_rating)
 
     def analyze_playlist(self, playlist):
         #Creates the dictionary object to return
@@ -145,8 +148,8 @@ class MatchingCategorySong(MatchingCategory):
 
 class MatchingCategoryAlbum(MatchingCategory):
 
-    def __init__(self, playlist, playlist_data_for_merged_mc):
-        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
+    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
+        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc, harmony_rating)
 
 
     def analyze_playlist(self, playlist):
@@ -177,8 +180,8 @@ class MatchingCategoryAlbum(MatchingCategory):
 
 class MatchingCategoryArtist(MatchingCategory):
 
-    def __init__(self, playlist, playlist_data_for_merged_mc):
-        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
+    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
+        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc, harmony_rating)
 
 
     def analyze_playlist(self, playlist):
@@ -207,9 +210,10 @@ class MatchingCategoryArtist(MatchingCategory):
         return self.song_list
     
 class MatchingCategoryGenre(MatchingCategory):
-    def __init__(self, playlist, playlist_data_for_merged_mc):
-        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc)
-     
+    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
+        MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc, harmony_rating)
+    #This method have extremly long runtime. 
+
     def analyze_playlist(self,playlist):
         playlist_analysis = {}
         #Make a list of strings that consists of a spotify api call and up to 50 artistids. 
@@ -293,27 +297,16 @@ def menu(self):
     #option = input("How do you want to merge the playlists?"
     spotify = spotipy.Spotify(auth=token)
     playlists = []
-    '''while playlist:
-            playlists.append(Playlist.token, username, playlist)
-            playlist = input("Enter the next username: ")
-            playlist = input("Enter the next URI: ")
-            if playlist = ""
-                playlist = None
-        '''
-    #The playlists added below are testdata
-    """p1 = Playlist(token, username, 'spotify:user:velys:playlist:2aDpdr0r4qP6YNp2227CIi')
-    playlists.append(p1)
-    #playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:1Q6ayuLj8JRZsQWagsMOgR'))
-    #playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:3POCCOJC8A3jsGGdqtw0pY'))
-    """
-    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:7n0np8taZhlvE0iNYjC9Gu'))
-    playlists.append(Playlist(token, 'sanna_19', 'spotify:user:sanna_19:playlist:1hNFR8Y66XAibRx5xDnYiZ'))
-    playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:0FK7E35FEHnvIGZZeN6wqG'))
-    #playlists.append(Playlist(token, username, None)
-    
-    npl = merge_playlists(*playlists)
-    npl.create_playlist(npl.generate_playlist())
-#menu()
+    for uri in playlist_uris:
+        playlists.append(Playlist(token, username, uri))
 
+
+    merged_playlist = self.merge_playlists(*playlists)
+
+    merged_playlist.create_playlist(merged_playlist.generate_playlist())
+
+    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
+    for mc in merged_playlist.matching_categories:
+        print mc
 
 
