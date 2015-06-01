@@ -44,17 +44,6 @@ class Playlist:
         else:
             print "Can't get token for" + self.username
 
-    """def generate_matching_categories(self):
-        #hardkodat, se till att det gar att konfigurera @ runtime
-        print "generating matching categories"
-
-        new_matching_category_song = MatchingCategorySong(self)
-        new_matching_category_artist = MatchingCategoryArtist(self)
-
-        self.matching_categories.append(new_matcshing_category_song)
-        self.matching_categories.append(new_matching_category_artist)
-    """
-
 
     def generate_playlist(self):
         main_krover = []
@@ -90,7 +79,7 @@ class Playlist:
 
 class MatchingCategory(object):
 
-    def __init__(self, playlist, playlist_data_for_merged_mc):
+    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating = 0):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
@@ -297,7 +286,7 @@ def menu(self, username, token, *playlist_uris):
 
     print "Yo, this is menu(), username is: "+str(username)
     print "Yo, this is menu(), token is: "+str(token)
-    print "Yo, this is menu(), uris is: "+str(playlist_uris)
+    print "Yo, this is menu(), uris are: "+str(playlist_uris)
     playlists = []
     for uri in playlist_uris:
         playlists.append(Playlist(token, username, uri))
