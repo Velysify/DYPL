@@ -43,6 +43,11 @@ while (not exit):
 
         instance.menu(instance, username, token, *playlist_uris)
 
+<<<<<<< HEAD
     name_of_playlist = raw_input("Input a ")
     inp = raw_input("Done, the new playlist is not added to your account. Type \'done\' to exit, or anything else to restart")
     if (inp.lower()=="done"): exit = True
+=======
+    inp = raw_input("Done, the new playlist is added to your account. Type \'done\' to exit, or anything else to restart")
+    if (inp.lower()=="done"): exit = True
+>>>>>>> bd1c72afabc1810838db6014c904f1c6138d667f
