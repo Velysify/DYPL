@@ -1,15 +1,18 @@
 import PlaylistMergerClasses
-
+import MergingAlgorithms
 instance = PlaylistMergerClasses
+
 
 exit = False
 
 #test data ---------------------------------------------------------------
-test_token = 'BQDUXmqKsWSLlT26sC7PDUdJSUCKSMZce6TWa53WnryRwgv_9jD86U3ELu6BV1V-dzH1o7SuGAmn9eSLdhdty_jbE0Qgm7qUBel6i5BkTJTRBKom-gu6KUzuHZw8ta76eykfYw2qxhSb57_goGSZBXf35fGPuWFcF6BPd-jM7mEB32qaqSL9r-N_zMjQFQlLhrtnB1nlbntPsEhNfSIaSfoIzgMus1keSgFRLdoWz9GwVGy_'
+test_token = 'BQAw8gHO_ZkqX76w_7rCza2w42EyqEjpnZ3wJ9cOczStfs5kOjJW0TYQ8zY7oL906Nw_LPVS5OSsx4N7_rQqo5xGpZczEmKJ60qonNvU4zfBgdPwXVt6yQWdC-ttxAJGR8Sm2Q_LU5y6DABdhiCPAqgoO2v0VwnZM7MyKHMK6BIbVOtZW_W0mqSTm6UuY2Q1IACEpigGQa-14CFd1fCzbGlZ9dM315WEXHLs5pF_qP9b1a3X'
 test_username = "velys"
-metal_and_top40_playlist = '7n0np8taZhlvE0iNYjC9Gu'
-classic_hiphop_and_rock_playlist = '3jeoIpQpRdDrPskLdcRVW0'
-schlager_and_pop_playlist = '0FK7E35FEHnvIGZZeN6wqG'
+test_algo = "Based_on_common_tastes"
+test_playlist = "Simple_merger"
+metal_and_top40_playlist = PlaylistMergerClasses.Playlist(test_token, test_username, '7n0np8taZhlvE0iNYjC9Gu')
+classic_hiphop_and_rock_playlist = PlaylistMergerClasses.Playlist(test_token, test_username, '3jeoIpQpRdDrPskLdcRVW0')
+schlager_and_pop_playlist = PlaylistMergerClasses.Playlist(test_token, test_username, '0FK7E35FEHnvIGZZeN6wqG')
 #test data ----------------------------------------------------------------
 
 
@@ -22,13 +25,13 @@ while (not exit):
 
     done = False
     counter = 1
-    playlist_uris = []
-    inpp = raw_input("Now enter the URIs of the playlists you wish to merge, type \'done\' when you're done, '\test'\ to run with default testdata or anything else to proceed")
+    playlists = []
+    inpp = raw_input("Now enter the URIs of the playlists you wish to merge, type \'done\' when you're done, \'test\' to run with default testdata or anything else to proceed: ")
 
     if (inpp.lower() == "done"):
         exit = True
     elif (inpp.lower() == "test"):
-        instance.menu(instance, test_username, test_token, metal_and_top40_playlist, classic_hiphop_and_rock_playlist, schlager_and_pop_playlist)
+        instance.menu(instance, test_username, test_token, test_algo, test_playlist, metal_and_top40_playlist, classic_hiphop_and_rock_playlist, schlager_and_pop_playlist)
     else:
 
         while (not done):
@@ -39,11 +42,19 @@ while (not exit):
             elif (inpu == ""):
                 playlists.append(PlaylistMergerClasses.Playlist(token, username, inp))
             else:
-                playlists.append(PlaylistMergerClasses.Playlistt(token, inpu, inp))
+                playlists.append(PlaylistMergerClasses.Playlist(token, inpu, inp))
+            counter += 1
+        print("List of Merging Algorithms. Case sensetive!")
+        for algorithm in MergingAlgorithms.MergingAlgorithm.__subclasses__():
+            print algorithm.__name__
 
+        algo = raw_input("Please choose an algorithm from those listed: ")
+        
+        print("List of Playlist Merging Algorithms. Case sensetive!")
+        for algorithm in MergingAlgorithms.PlaylistMergerAlgorithm.__subclasses__():
+            print algorithm.__name__
+        playlist_algo = raw_input("Please choose an algorithm for merging playlists: ")
+        instance.menu(instance, username, token, algo, playlist_algo, *playlists)
 
-
-        instance.menu(instance, username, token, *playlists)
-
-    inp = raw_input("Done, the new playlist is not added to your account. Type \'done\' to exit, or anything else to restart")
+    inp = raw_input("Done, the new playlist is now added to your account. Type \'done\' to exit, or anything else to restart: ")
     if (inp.lower()=="done"): exit = True

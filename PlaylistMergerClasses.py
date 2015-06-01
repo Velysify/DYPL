@@ -18,7 +18,7 @@ class Playlist:
             self.fill_up_array_of_songs_in_playlist(self.playlist)
             self.playlist_max_size = playlist_max_size
 
-            create_matching_categories(self)
+            self.create_matching_categories()
 
         #When creating a new playlist for generating playlists.     
         else:
@@ -40,6 +40,12 @@ class Playlist:
 
         else:
             print "Can't get token for" + self.username
+
+    def create_matching_categories(self):
+        #Finds all Subclasses of MatchingCategory, initzialise it with the entered playlist and adds it to the list.
+        categories = [cls for cls in MatchingCategory.__subclasses__()]
+        for category in categories:
+            self.matching_categories.append(category(self, None))
 
     def generate_playlist(self):
         song_list = []
@@ -75,7 +81,7 @@ class Playlist:
 
 class MatchingCategory(object):
 
-    def __init__(self, playlist, playlist_data_for_merged_mc):
+    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating = 0):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
@@ -229,9 +235,8 @@ class MatchingCategoryGenre(MatchingCategory):
                                 value = playlist_analysis.get(genre)
                                 new_value = value[0] +1
                                 value[0] = new_value
-                            
-                    
-                #When Error 429 is raised read the servers reply and wait for that many seconds before continuing.                     
+                                    
+            #When Error 429 is raised read the servers reply and wait for that many seconds before continuing.                     
             except urllib2.HTTPError, err:
                 if err.code == 429:
                     time.sleep(float(err.hdrs.get('Retry-After')))         
@@ -243,25 +248,20 @@ class MatchingCategoryGenre(MatchingCategory):
 
         self.song_list = PlaylistGeneratorAlgorithms.funky_genre_algorithm(self.playlist_data)
         return self.song_list
-    
-def create_matching_categories(playlist):
-    #Finds all Subclasses of MatchingCategory, initzialise it with the entered playlist and adds it to the list.
-    categories = [cls for cls in MatchingCategory.__subclasses__()]
-    for category in categories:
-        playlist.matching_categories.append(category(playlist, None))
-                
+                    
 def merge_matching_categories(*matching_categories):
-    #Set the alogritm to be used
-    merging_algorithm = MergingAlgorithms.mc_by_compromising
-    
+    #Set the alogrithm to be used
+    merging_algorithm = eval("MergingAlgorithms." + merge_algorithm +"()").merge
+        
     return merging_algorithm(*matching_categories)
     
-def merge_playlists(*playlists):
+def merge_playlists(playlist_merge_algorithm, *playlists):
     #Create new playlist with the same username and token as the other playlists.
     new_playlist = Playlist(token, username, None)
 
     #Merge the playlists    
-    merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
+    merging_algorithm = eval("MergingAlgorithms." + playlist_merge_algorithm +"()").merge
+    
     return merging_algorithm(new_playlist, *playlists)
 
 def check_for_duplicates(song_list):
@@ -272,7 +272,7 @@ def check_for_duplicates(song_list):
    return set.keys()
   
 
-def menu(self, given_username, given_token, *playlists):
+def menu(self, given_username, given_token, given_algorithm, playlist_merge_algorithm, *playlists):
     #username = input("Please enter your spotify username: ") # Should also be global?
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
     #token = input("Copy the access token into the program: ") Token should be global??
@@ -283,7 +283,11 @@ def menu(self, given_username, given_token, *playlists):
     username = given_username
     global token
     token = given_token
-    merged_playlist = self.merge_playlists(*playlists)
+    global merge_algorithm
+    merge_algorithm = given_algorithm
+    
+    
+    merged_playlist = self.merge_playlists(playlist_merge_algorithm, *playlists)
 
     merged_playlist.create_playlist(merged_playlist.generate_playlist())
 
