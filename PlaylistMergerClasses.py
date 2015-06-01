@@ -8,7 +8,7 @@ import spotipy.util as util
 
 class Playlist:
 
-    def __init__(self, token, username, playlist):
+    def __init__(self, token, username, playlist, playlist_max_size = 1000):
         if playlist:
             self.token = token
             self.username = username
@@ -16,6 +16,7 @@ class Playlist:
             self.array_of_songs_in_playlist = []
             self.matching_categories = []
             self.fill_up_array_of_songs_in_playlist(self.playlist)
+            self.playlist_max_size = playlist_max_size
 
             create_matching_categories(self)
 
