@@ -61,12 +61,11 @@ class Playlist:
         for category in self.matching_categories:
             krover = category.generate_playlist()
             main_krover.extend(krover)
-        
         return main_krover
 
     def create_playlist(self, list_of_songs):
         song_list = []
-        limit = 1
+        limit = None
         for i in range(len(list_of_songs)):
             song_id = list_of_songs[i]['id']
             song_list.append(song_id)
@@ -91,38 +90,18 @@ class Playlist:
 
 class MatchingCategory(object):
 
-    def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
+    def __init__(self, playlist, playlist_data_for_merged_mc):
 
         #If playlist is None and playlist_data_for_merged_mc isn't, the MatchingCategory is being initiated as as a merge between two others.
         #In that case, set playlist_data to the dictionary provided by the merging method
         if (playlist_data_for_merged_mc == None and playlist != None):
             self.playlist_data = {}
             self.playlist_data = self.analyze_playlist(playlist)
-            self.harmony_rating = harmony_rating
         elif (playlist_data_for_merged_mc != None and playlist== None):
             self.playlist_data = playlist_data_for_merged_mc
-            self.harmony_rating = harmony_rating
-
         else:
             raise NameError ('Vajsing!')
-        """
-        def __init__(self, playlist):
-            self.playlist_data = {}
-            self.playlist_data = self.analyze_playlist(playlist)
-            self.harmony_rating = 0
-
-            #playlist_data should always be implemented as a dictionary with a string as a key and a list as value.
-            #The key string represents the item of each category (genre names for a genre category, artist names for an artist category, etc.)
-            #The first value of the list should always be an inte representing the "weight" of each item
-
-
-        #Returns an array of Spotify songs, later used by the Playlist-object to create a Spotify playlist
-        def generate_playlist(self):
-            pass
-        #Analyzes the array of songs (passed as the parameter 'playlist'), returns a dictionary with keys and weights to be stored in the playlist_data variable
-        def analyze_playlist(playlist):
-            pass
-        """
+        
     def __str__(self):
         tjolahopp = ""
 
@@ -130,7 +109,7 @@ class MatchingCategory(object):
             tjolahopp = tjolahopp+(item_name)+" weight: "+str(weight[0])+"\n"
 
         return tjolahopp
-
+    
 class MatchingCategorySong(MatchingCategory):
 
     def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
@@ -234,8 +213,10 @@ class MatchingCategoryGenre(MatchingCategory):
     def __init__(self, playlist, playlist_data_for_merged_mc, harmony_rating=0):
         MatchingCategory.__init__(self, playlist, playlist_data_for_merged_mc, harmony_rating)
     #This method have extremly long runtime. 
+
     def analyze_playlist(self,playlist):
         playlist_analysis = {}
+        #Make a list of strings that consists of a spotify api call and up to 50 artistids. 
         tracklist = [playlist.array_of_songs_in_playlist[x:x+50] for x in xrange(0, len(playlist.array_of_songs_in_playlist), 50)]
         for tracks in tracklist:
             href = "https://api.spotify.com/v1/artists/?ids="
@@ -244,32 +225,34 @@ class MatchingCategoryGenre(MatchingCategory):
             href = href[:-1]
             #Try until HTTP Error 429: Too many requests is raises.
             try:
-                #For each line in the href: look for genres and clean them to make searchable strings.
-                for line in urllib2.urlopen(href):
-                    genre = re.search('\"\s*genres\" \: .*', line)
-                    if genre:
-                        genre = genre.group(0).strip(",").replace(']', "").replace(' "',"").replace('" ', "").split("[")
-                        if not genre[1] == " ":
-                            genres = genre[1].replace('"',"").split(",")
-                            for genre in genres:
-                                if genre not in self.playlist_data.keys() and genre not in playlist_analysis.keys():
-                                    item = []
-                                    item.append(1)
-                                    item.append(None)
-                                    playlist_analysis[genre] = item
-                                else:
-                                    value = playlist_analysis.get(genre)
-                                    new_value = value[0] +1
-                                    value[0] = new_value
-            #When Error 429 is raised read the servers reply and wait for that many seconds before continuing.                        
+                response = urllib2.urlopen(href)
+                page = response.read().replace("null", "None")
+                page = page[15:-2]
+                pagedict = eval(page)
+                for index in pagedict:
+                    genres = index.get("genres")
+                    if genres:
+                        for genre in genres:
+                            if genre not in self.playlist_data.keys() and genre not in playlist_analysis.keys():
+                                item = []
+                                item.append(1)
+                                item.append(None)
+                                playlist_analysis[genre] = item
+                            else:
+                                value = playlist_analysis.get(genre)
+                                new_value = value[0] +1
+                                value[0] = new_value
+                            
+                    
+                #When Error 429 is raised read the servers reply and wait for that many seconds before continuing.                     
             except urllib2.HTTPError, err:
                 if err.code == 429:
                     print("Retry!")
                     time.sleep(float(err.hdrs.get('Retry-After')))         
                 else:
-                    raise
-                                    
+                    raise                           
         return playlist_analysis
+    
     def generate_playlist(self):
 
         self.song_list = PlaylistGeneratorAlgorithms.funky_genre_algorithm(self.playlist_data)
@@ -283,7 +266,7 @@ def create_matching_categories(playlist):
                 
 def merge_matching_categories(*matching_categories):
     #Set the alogritm to be used
-    merging_algorithm = MergingAlgorithms.mc_by_compromising
+    merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
     
     return merging_algorithm(*matching_categories)
     
@@ -327,13 +310,5 @@ def menu(self, username, token, *playlist_uris):
     print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
     for mc in merged_playlist.matching_categories:
         print mc
-
-
-
-
-
-
-#menu()
-
 
 
