@@ -6,7 +6,7 @@ instance = PlaylistMergerClasses
 exit = False
 
 #test data ---------------------------------------------------------------
-test_token = 'BQAw8gHO_ZkqX76w_7rCza2w42EyqEjpnZ3wJ9cOczStfs5kOjJW0TYQ8zY7oL906Nw_LPVS5OSsx4N7_rQqo5xGpZczEmKJ60qonNvU4zfBgdPwXVt6yQWdC-ttxAJGR8Sm2Q_LU5y6DABdhiCPAqgoO2v0VwnZM7MyKHMK6BIbVOtZW_W0mqSTm6UuY2Q1IACEpigGQa-14CFd1fCzbGlZ9dM315WEXHLs5pF_qP9b1a3X'
+test_token = 'BQBfJjqiKFp57brHfbiCSEEADFI56aqsowGgEfJRY6op5EHVhHo93atymMgCPzaUbNlukhPcsGX62i47heXYTm4sR_bqYcuHzZYxcPMItUKtwTDwECGsokoVGOMpf6RgOH8-rPFAg2L9-owmFjwg5JsqiThQFUXl8LsSGJ7NvOQNPJeBFSDqCAI51O1nln3o697YT65C-IFAzveg2X9ziurcnbvlK-cvc4G4b11XbPosegOo'
 test_username = "velys"
 test_algo = "Based_on_common_tastes"
 test_playlist = "Simple_merger"
