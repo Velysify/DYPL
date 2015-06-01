@@ -54,7 +54,7 @@ class Playlist:
             song_list.extend(song_list_from_category)
         return song_list
 
-    def create_playlist(self, list_of_songs):
+    def create_playlist(self, list_of_songs, name_of_playlist):
         song_list = []
         limit = 2
         for i in range(len(list_of_songs)):
@@ -68,7 +68,7 @@ class Playlist:
         #If there is still a token create and fill the new playlist with tracks.
         if self.token:
             sp = spotipy.Spotify(auth=self.token)
-            playlist = sp.user_playlist_create(self.username,"Merged Playlist!")
+            playlist = sp.user_playlist_create(self.username,name_of_playlist)
             if not limit:
                 for tracks_to_add in tracks:
                     sp.user_playlist_add_tracks(self.username, playlist['id'],tracks_to_add)
