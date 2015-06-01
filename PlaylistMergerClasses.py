@@ -54,15 +54,15 @@ class Playlist:
 
 
     def generate_playlist(self):
-        main_krover = []
+        song_list = []
         for category in self.matching_categories:
-            krover = category.generate_playlist()
-            main_krover.extend(krover)
-        return main_krover
+            song_list_from_category = category.generate_playlist()
+            song_list.extend(song_list_from_category)
+        return song_list
 
     def create_playlist(self, list_of_songs):
         song_list = []
-        limit = None
+        limit = 2
         for i in range(len(list_of_songs)):
             song_id = list_of_songs[i]['id']
             song_list.append(song_id)
@@ -100,12 +100,12 @@ class MatchingCategory(object):
             raise NameError ('Vajsing!')
         
     def __str__(self):
-        tjolahopp = ""
+        printout = ""
 
         for item_name, weight in self.playlist_data.iteritems():
-            tjolahopp = tjolahopp+(item_name)+" weight: "+str(weight[0])+"\n"
+            printout = printout+(item_name)+" weight: "+str(weight[0])+"\n"
 
-        return tjolahopp
+        return printout
     
 class MatchingCategorySong(MatchingCategory):
 
@@ -219,13 +219,15 @@ class MatchingCategoryGenre(MatchingCategory):
             for track in tracks:
                 href += track['artists'][0]['id']+","
             href = href[:-1]
-            #Try until HTTP Error 429: Too many requests is raises.
+            #Try until HTTP Error 429: Too many requests is raised.
+            #Read the respone, replacing null with None and then take the relevant part of hte string and run it as code.
             try:
                 response = urllib2.urlopen(href)
                 page = response.read().replace("null", "None")
                 page = page[15:-2]
-                pagedict = eval(page)
-                for index in pagedict:
+                pagelist = eval(page)
+                #For each dictionary in the pagelist: Get the "Genres" list and if it is not empty add every genre to the playlist_data.
+                for index in pagelist:
                     genres = index.get("genres")
                     if genres:
                         for genre in genres:
@@ -243,7 +245,6 @@ class MatchingCategoryGenre(MatchingCategory):
                 #When Error 429 is raised read the servers reply and wait for that many seconds before continuing.                     
             except urllib2.HTTPError, err:
                 if err.code == 429:
-                    print("Retry!")
                     time.sleep(float(err.hdrs.get('Retry-After')))         
                 else:
                     raise                           
@@ -262,20 +263,20 @@ def create_matching_categories(playlist):
                 
 def merge_matching_categories(*matching_categories):
     #Set the alogritm to be used
-    merging_algorithm = MergingAlgorithms.mc_based_on_common_tastes
+    merging_algorithm = MergingAlgorithms.mc_by_compromising
     
     return merging_algorithm(*matching_categories)
     
 def merge_playlists(*playlists):
     #Create new playlist with the same username and token as the other playlists.
-    new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
+    new_playlist = Playlist(playlists[0].token, playlists[0].token, None)
 
     #Merge the playlists    
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
     return merging_algorithm(new_playlist, *playlists)
 
 def check_for_duplicates(song_list):
-   # not order preserving
+   #Not order preserving
    #f1 from http://www.peterbe.com/plog/uniqifiers-benchmark
    set = {}
    map(set.__setitem__, song_list, [])
@@ -283,9 +284,9 @@ def check_for_duplicates(song_list):
   
 
 def menu(self):
-    #username = input("Please enter your spotify username: ")
+    #username = input("Please enter your spotify username: ") # Should also be global?
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
-    #token = input("Copy the access token into the program: ")
+    #token = input("Copy the access token into the program: ") Token should be global??
     #playlist = input("Enter the URI of first playlist to be merged: ")
     token = 'BQDUXmqKsWSLlT26sC7PDUdJSUCKSMZce6TWa53WnryRwgv_9jD86U3ELu6BV1V-dzH1o7SuGAmn9eSLdhdty_jbE0Qgm7qUBel6i5BkTJTRBKom-gu6KUzuHZw8ta76eykfYw2qxhSb57_goGSZBXf35fGPuWFcF6BPd-jM7mEB32qaqSL9r-N_zMjQFQlLhrtnB1nlbntPsEhNfSIaSfoIzgMus1keSgFRLdoWz9GwVGy_'
     username = 'velys' #Token and username are testdata
