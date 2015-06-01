@@ -3,6 +3,7 @@ import MergingAlgorithms
 import urllib2
 import re
 import time
+import random
 import spotipy
 import spotipy.util as util
 
@@ -55,7 +56,6 @@ class Playlist:
 
     def generate_playlist(self):
         main_krover = []
-
         for category in self.matching_categories:
             krover = category.generate_playlist()
             main_krover.extend(krover)
@@ -63,19 +63,27 @@ class Playlist:
         return main_krover
 
     def create_playlist(self, list_of_songs):
-        print len(list_of_songs)
         song_list = []
+        limit = 1
         for i in range(len(list_of_songs)):
             song_id = list_of_songs[i]['id']
             song_list.append(song_id)
+        #Remove identical songs from the playlist
         song_list = check_for_duplicates(song_list)
+        random.shuffle(song_list)
+        #Split into parts with a list of 100 ids in each index. (user_playlist_add_tracks has a limit of 100 tracks per call)
         tracks = [song_list[x:x+100] for x in xrange(0, len(song_list), 100)]
+        #If there is still a token create and fill the new playlist with tracks.
         if self.token:
             sp = spotipy.Spotify(auth=self.token)
             playlist = sp.user_playlist_create(self.username,"Merged Playlist!")
-                
-            for tracks_to_add in tracks:
-                sp.user_playlist_add_tracks(self.username, playlist['id'],tracks_to_add)
+            if not limit:
+                for tracks_to_add in tracks:
+                    sp.user_playlist_add_tracks(self.username, playlist['id'],tracks_to_add)
+            else:
+                for x in xrange(0, limit):
+                    sp.user_playlist_add_tracks(self.username, playlist['id'],tracks[x])
+        #Else print a statement
         else:
             print "Can't get token for" + self.username
 
@@ -254,6 +262,7 @@ class MatchingCategoryGenre(MatchingCategory):
             #When Error 429 is raised read the servers reply and wait for that many seconds before continuing.                        
             except urllib2.HTTPError, err:
                 if err.code == 429:
+                    print("Retry!")
                     time.sleep(float(err.hdrs.get('Retry-After')))         
                 else:
                     raise
@@ -277,9 +286,8 @@ def merge_matching_categories(*matching_categories):
     return merging_algorithm(*matching_categories)
     
 def merge_playlists(*playlists):
-    print playlists
     #Create new playlist with the same username and token as the other playlists.
-    new_playlist = Playlist(playlists[0].token, 'sanna_19', None)
+    new_playlist = Playlist(playlists[0].token, playlists[0].username, None)
 
     #Merge the playlists    
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
@@ -319,7 +327,7 @@ def menu(self):
     playlists.append(Playlist(token, 'kygoofficial', 'spotify:user:kygoofficial:playlist:7wYC2trtKwO73LskQGJLas'))
     playlists.append(Playlist(token, 'sanna_19', 'spotify:user:sanna_19:playlist:1cC4fqs5YtUlmYd6t4T4Ap'))
     playlists.append(Playlist(token, username, 'spotify:user:velys:playlist:0FK7E35FEHnvIGZZeN6wqG'))
-    #playlists.append(Playlist(token, username, None))
+    #playlists.append(Playlist(token, username, None)
     
     token = 'BQCDltjecmRr1GpeXrFZJP2WyjNtYsgonM-c8TwCjmj057gSugaxTplcMDCa5H3H4z5RWhY25l2lR0r0NFmLc4TJU8dguUd3QWdgrer7yVPtpmHwfAJrWADs7gFccNsxomhDtnpGAL9u5V5tQLA7k8I5Tpzc_tLe0W1JzxeEEoXAQdX8rKLE-hceXov77ApNK-auXRh-h6X1slg'
     username = "littaly"
