@@ -5,12 +5,11 @@ instance = PlaylistMergerClasses
 exit = False
 
 #test data ---------------------------------------------------------------
-test_token = 'BQD1y4O7VEndT6L6R19vZvuOWuckGyvZdpmfJhdm_goRWuzPJXnIu4yTFTLK5n0P1VwaOytIs9EZQtLryKqa4SjBwh9JaR9EtuB6zp0i0jmMpfvqBzVNGYqxZ_yndNXHLuJ0ixndMoQbYD44lWUcfWv59pQOl2acPSZat4-HDyB86jDIP1nzFPfu691S-VeL0JJa4WQp5ELKz4YLqyHykc2_2xgVOgMOX4VcE519g31xt38g-NUtKlF8DWySAJTNelYRrqEayqC-NgwMwaT0t9FZlKZSWpRpkYHUMI8Uh34'
-test_username = "littaly"
-empty_playlist = PlaylistMergerClasses.Playlist(test_token, test_username, None)
-metal_and_top40_playlist = '66bduhu9Juv1oeKvdYV4lQ'
-classic_hiphop_and_rock_playlist = '0LNfNIbJBPPNt8mCM8GQ1p'
-schlager_and_pop_playlist = '1GKhWgfJoDrQEnPczfNCAh'
+test_token = 'BQDUXmqKsWSLlT26sC7PDUdJSUCKSMZce6TWa53WnryRwgv_9jD86U3ELu6BV1V-dzH1o7SuGAmn9eSLdhdty_jbE0Qgm7qUBel6i5BkTJTRBKom-gu6KUzuHZw8ta76eykfYw2qxhSb57_goGSZBXf35fGPuWFcF6BPd-jM7mEB32qaqSL9r-N_zMjQFQlLhrtnB1nlbntPsEhNfSIaSfoIzgMus1keSgFRLdoWz9GwVGy_'
+test_username = "velys"
+metal_and_top40_playlist = '7n0np8taZhlvE0iNYjC9Gu'
+classic_hiphop_and_rock_playlist = '3jeoIpQpRdDrPskLdcRVW0'
+schlager_and_pop_playlist = '0FK7E35FEHnvIGZZeN6wqG'
 #test data ----------------------------------------------------------------
 
 
@@ -18,8 +17,8 @@ schlager_and_pop_playlist = '1GKhWgfJoDrQEnPczfNCAh'
 while (not exit):
     print "Welcome to the Spotify Playlist Merger"
 
-    username = raw_input("please enter your account username")
-    token = raw_input("Please enter the access token for your account")
+    username = raw_input("Please enter your account username: ")
+    token = raw_input("Please enter the access token for your account: ")
 
     done = False
     counter = 1
@@ -33,15 +32,18 @@ while (not exit):
     else:
 
         while (not done):
+            inpu = raw_input("Please enter the username for the next playlist: ")
             inp = raw_input("URI "+str(counter)+": ")
-
             if (inp.lower() == "done"):
                 done = True
+            elif (inpu == ""):
+                playlists.append(PlaylistMergerClasses.Playlist(token, username, inp))
             else:
-                playlist_uris.append(inp)
+                playlists.append(PlaylistMergerClasses.Playlistt(token, inpu, inp))
 
 
-        instance.menu(instance, username, token, *playlist_uris)
+
+        instance.menu(instance, username, token, *playlists)
 
     inp = raw_input("Done, the new playlist is not added to your account. Type \'done\' to exit, or anything else to restart")
     if (inp.lower()=="done"): exit = True

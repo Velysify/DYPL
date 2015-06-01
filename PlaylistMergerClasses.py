@@ -1,7 +1,6 @@
 import PlaylistGeneratorAlgorithms
 import MergingAlgorithms
 import urllib2
-import re
 import time
 import random
 import spotipy
@@ -11,8 +10,6 @@ class Playlist:
 
     def __init__(self, token, username, playlist, playlist_max_size = 1000):
         if playlist:
-            print "username:  "+str(username)
-            print "playlist: "+str(playlist)
             self.token = token
             self.username = username
             self.playlist = playlist
@@ -43,18 +40,6 @@ class Playlist:
 
         else:
             print "Can't get token for" + self.username
-
-    """def generate_matching_categories(self):
-        #hardkodat, se till att det gar att konfigurera @ runtime
-        print "generating matching categories"
-
-        new_matching_category_song = MatchingCategorySong(self)
-        new_matching_category_artist = MatchingCategoryArtist(self)
-
-        self.matching_categories.append(new_matcshing_category_song)
-        self.matching_categories.append(new_matching_category_artist)
-    """
-
 
     def generate_playlist(self):
         song_list = []
@@ -273,7 +258,7 @@ def merge_matching_categories(*matching_categories):
     
 def merge_playlists(*playlists):
     #Create new playlist with the same username and token as the other playlists.
-    new_playlist = Playlist(playlists[0].token, playlists[0].token, None)
+    new_playlist = Playlist(token, username, None)
 
     #Merge the playlists    
     merging_algorithm = MergingAlgorithms.pl_supre_best_algorith_ever
@@ -287,26 +272,22 @@ def check_for_duplicates(song_list):
    return set.keys()
   
 
-def menu(self):
+def menu(self, given_username, given_token, *playlists):
     #username = input("Please enter your spotify username: ") # Should also be global?
     #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
     #token = input("Copy the access token into the program: ") Token should be global??
     #playlist = input("Enter the URI of first playlist to be merged: ")
-    token = 'BQDUXmqKsWSLlT26sC7PDUdJSUCKSMZce6TWa53WnryRwgv_9jD86U3ELu6BV1V-dzH1o7SuGAmn9eSLdhdty_jbE0Qgm7qUBel6i5BkTJTRBKom-gu6KUzuHZw8ta76eykfYw2qxhSb57_goGSZBXf35fGPuWFcF6BPd-jM7mEB32qaqSL9r-N_zMjQFQlLhrtnB1nlbntPsEhNfSIaSfoIzgMus1keSgFRLdoWz9GwVGy_'
-    username = 'velys' #Token and username are testdata
+    #Token and username are testdata
     #option = input("How do you want to merge the playlists?"
-    spotify = spotipy.Spotify(auth=token)
-    playlists = []
-    for uri in playlist_uris:
-        playlists.append(Playlist(token, username, uri))
-
-
+    global username
+    username = given_username
+    global token
+    token = given_token
     merged_playlist = self.merge_playlists(*playlists)
 
     merged_playlist.create_playlist(merged_playlist.generate_playlist())
 
-    print "here comes the merged playlist: "+str(merged_playlist.matching_categories)
-    for mc in merged_playlist.matching_categories:
-        print mc
+    print "Here comes the merged playlist: "+str(merged_playlist.matching_categories)
+
 
 
