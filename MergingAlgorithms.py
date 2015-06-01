@@ -6,7 +6,6 @@ def mc_based_on_common_tastes(*matching_categories):
     #Returns a matching_category containing only the songs present in all of the playlists
     #Hopelessly ugly and ineffective, should be rewritsten
     merged_matching_category = {}
-
     
     for mc in matching_categories:
         for entry in mc.playlist_data.keys():
@@ -22,8 +21,6 @@ def mc_based_on_common_tastes(*matching_categories):
 
 def mc_by_compromising(*matching_categories):
     merged_matching_category = {}
-    harmony_rating = 0
-
 
     number_of_merging_categories = len(matching_categories)
     total_playlist_weight = 0
@@ -65,29 +62,27 @@ def mc_by_compromising(*matching_categories):
     if all_items:        
         threshold = total_playlist_weight/len(all_items)
         for entry in merged_matching_category.keys():
+            #Checks how many of the original playlists the entry was present in
+            number_of_mcs_present_in = 0
+            for x in items_in_each_playlist:
+                if entry in items_in_each_playlist: number_of_mcs_present_in += 1
 
-        #Checks how many of the original playlists the entry was present in
-        number_of_mcs_present_in = 0
-        for x in items_in_each_playlist:
-            if entry in items_in_each_playlist: number_of_mcs_present_in += 1
-
-       #Lets the entry be in the list (maintaining its total weight) if it was present in more than one of the  original matching categories
-        if (number_of_mcs_present_in>1):
-            harmony_rating += number_of_mcs_present_in
-        #If not, but it's present in the currently selected original matching category, it is left in, but with its weight reduced to 1
-        elif (entry in items_in_each_playlist[current_mc]):
-            merged_matching_category[entry][0] = 1
-        #Lastly, check if the entry is above the threshold for inclusion. That is, if it appears in a matching category more times than average.
-        #If it does, let it stay, but with its weight divided by the average.
-        elif (merged_matching_category[entry][0]>threshold):
+            #Lets the entry be in the list (maintaining its total weight) if it was present in more than one of the  original matching categories
+            if (number_of_mcs_present_in>1):
+                pass
+            #If not, but it's present in the currently selected original matching category, it is left in, but with its weight reduced to 1
+            elif (entry in items_in_each_playlist[current_mc]):
+                merged_matching_category[entry][0] = 1
+            #Lastly, check if the entry is above the threshold for inclusion. That is, if it appears in a matching category more times than average.
+            #If it does, let it stay, but with its weight divided by the average.
+            elif (merged_matching_category[entry][0]>threshold):
 
                 merged_matching_category[entry][0] = merged_matching_category[entry][0]/threshold
                 if merged_matching_category[entry][0]<1: del merged_matching_category[entry]
             current_mc += 1
             if current_mc>number_of_merging_categories-1: current_mc = 0
 
-
-    return matching_categories[0].__class__(None, merged_matching_category, harmony_rating)
+    return matching_categories[0].__class__(None, merged_matching_category)
 
 
 def pl_supre_best_algorith_ever(new_playlist, *playlists):
