@@ -271,14 +271,8 @@ def check_for_duplicates(song_list):
    map(set.__setitem__, song_list, [])
    return set.keys()
   
-
+#For initializing everything. Legacy of early development :)!
 def menu(self, given_username, given_token, given_algorithm, playlist_merge_algorithm, *playlists):
-    #username = input("Please enter your spotify username: ") # Should also be global?
-    #print "Get a OAuth Token from https://developer.spotify.com/web-api/console/get-track/
-    #token = input("Copy the access token into the program: ") Token should be global??
-    #playlist = input("Enter the URI of first playlist to be merged: ")
-    #Token and username are testdata
-    #option = input("How do you want to merge the playlists?"
     global username
     username = given_username
     global token
@@ -289,7 +283,7 @@ def menu(self, given_username, given_token, given_algorithm, playlist_merge_algo
     
     merged_playlist = self.merge_playlists(playlist_merge_algorithm, *playlists)
 
-    merged_playlist.create_playlist(merged_playlist.generate_playlist())
+    merged_playlist.create_playlist(merged_playlist.generate_playlist(),"Name here?")
 
     print "Here comes the merged playlist: "+str(merged_playlist.matching_categories)
 
